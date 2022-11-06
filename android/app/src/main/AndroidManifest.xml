@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.locika_dbn">
+    package="cz.david_svejda.locika_dbn">
    <application
-        android:label="locika_dbn"
+        android:label="Locika DBN"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -24,8 +24,11 @@ TODO: popis aplikace
 
 ### Použité knihovny
 - [go_router](https://pub.dev/packages/go_router)
-- [flutter_svg](https://pub.dev/packages/flutter_svg)
+- [logging](https://pub.dev/packages/logging)
 - [flutter_native_splash](https://pub.dev/packages/flutter_native_splash)
+- [flutter_svg](https://pub.dev/packages/flutter_svg)
+- [convex_bottom_bar](https://pub.dev/packages/convex_bottom_bar)
+- [flutter_bloc](https://pub.dev/packages/flutter_bloc)
 
 ### Nastavení jednotlivých typů aplikací
 #### iOS

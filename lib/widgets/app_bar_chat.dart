@@ -11,6 +11,7 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      toolbarHeight: 62.0 + 16.0,
       leading: const AppBarTextButton('Zavřít', ''),
       leadingWidth: 64.0,
       title: Image.asset(
@@ -18,7 +19,6 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
         height: 30.0,
       ),
       automaticallyImplyLeading: false,
-      toolbarHeight: 52.0,
       elevation: 0,
     );
   }

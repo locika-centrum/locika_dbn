@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../widgets/app_bar_chat.dart';
 
@@ -32,7 +33,7 @@ class ChatIntroScreen extends StatelessWidget {
             const Text('\nČasto se u vás doma křičí, vyhrožuje?'),
             const Text(
                 '\nUbližují si tvoji blízcí navzájem nebo přímo ubližují tobě?'),
-            Image.asset('assets/images/kluk_pod_posteli.png'),
+            SvgPicture.asset('assets/images/kluk_pod_posteli.svg'),
             const Text(
               'Neboj se, nejsi v tom sám/a.',
               style: TextStyle(fontWeight: FontWeight.bold),

@@ -1,4 +1,4 @@
-package com.example.locika_dbn
+package com.example.locikadbn
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -3,7 +3,7 @@ description: Chat application for Centrum LOCIKA.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: '>=2.18.2 <3.0.0'
@@ -21,7 +21,11 @@ dependencies:
   flutter_svg: ^1.1.6
   logging: ^1.1.0
   convex_bottom_bar: ^3.1.0+1
-  flutter_bloc: ^8.1.1
+  hive_flutter: ^1.1.0
+  hive: ^2.2.3
+  package_info_plus: ^3.0.2
+  provider: ^6.0.5
+  settings_ui: ^2.0.2
 
 dev_dependencies:
   flutter_test:
@@ -29,6 +33,8 @@ dev_dependencies:
 
   flutter_lints: ^2.0.0
   flutter_launcher_icons: ^0.10.0
+  hive_generator: ^2.0.0
+  build_runner: ^2.3.2
 
 flutter_icons:
   android: true

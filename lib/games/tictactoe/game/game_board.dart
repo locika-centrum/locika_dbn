@@ -18,23 +18,25 @@ class GameBoard {
   final List<Map<String, int>> _sizes = [
     {'size': 0, 'rows': 3, 'cols': 3, 'winning-len': 3},
     {'size': 1, 'rows': 5, 'cols': 5, 'winning-len': 4},
-    {'size': 2, 'rows': 10, 'cols': 10, 'winning-len': 5},
-    {'size': 3, 'rows': 12, 'cols': 12, 'winning-len': 5},
+    {'size': 2, 'rows': 8, 'cols': 8, 'winning-len': 5},
+    {'size': 3, 'rows': 10, 'cols': 10, 'winning-len': 5},
   ];
 
   late List<List<int?>> _board;
+  late List<List<bool>> _surrounding;
   late int _rows, _cols, _winningLen;
   late int _symbol;
   late int _availableMoves;
   int _boardValue = 0;
 
   List<List<int?>> get board => _board;
+  List<List<bool>> get surrounding => this._surrounding;
   int get rows => _rows;
   int get cols => _cols;
   int get symbol => _symbol;
   int get availableMoves => _availableMoves;
   bool isInside(int row, int col) =>
-      (0 < row && row <= _rows && 0 < col && col <= _cols);
+      (0 <= row && row < _rows && 0 <= col && col < _cols);
 
   GameBoard.from(this.size, GameBoard source) {
     _rows = source._rows;
@@ -42,7 +44,12 @@ class GameBoard {
     _winningLen = source._winningLen;
     _symbol = source._symbol;
 
-    _board = [for (var sublist in source._board) [...sublist]];
+    _board = [
+      for (var sublist in source._board) [...sublist]
+    ];
+    _surrounding = [
+      for (var sublist in source._surrounding) [...sublist]
+    ];
     _availableMoves = source._availableMoves;
     _boardValue = source._boardValue;
   }
@@ -58,6 +65,15 @@ class GameBoard {
       (index) => List.generate(
         _cols,
         (index) => null,
+        growable: false,
+      ),
+      growable: false,
+    );
+    _surrounding = List.generate(
+      _rows,
+      (index) => List.generate(
+        _cols,
+        (index) => false,
         growable: false,
       ),
       growable: false,
@@ -79,7 +95,16 @@ class GameBoard {
       move.winning = true;
     }
 
-    // _log.finest('Move recorded: $move');
+    int diameter = (_winningLen / 2).floor();
+    for (int i = -diameter; i <= diameter; i++) {
+      for (int j = -diameter; j <= diameter; j++) {
+        if (isInside(move.row + i, move.col + j) &&
+            (i == 0 || j == 0 || i.abs() == j.abs())) {
+          _surrounding[move.row + i][move.col + j] = true;
+        }
+      }
+    }
+
     return move;
   }
 
@@ -130,14 +155,21 @@ class GameBoard {
         (move.col - _winningLen + 1) >= 0 ? _winningLen - 1 : move.col,
         (move.row - _winningLen + 1) >= 0 ? _winningLen - 1 : move.row);
     int rightBottomDelta = min(
-        (move.col + _winningLen - 1) < _cols ? _winningLen : _cols - move.col,
-        (move.row + _winningLen - 1) < _rows ? _winningLen : _rows - move.row) - 1;
+            (move.col + _winningLen - 1) < _cols
+                ? _winningLen
+                : _cols - move.col,
+            (move.row + _winningLen - 1) < _rows
+                ? _winningLen
+                : _rows - move.row) -
+        1;
     if (leftTopDelta + rightBottomDelta + 1 >= _winningLen) {
-      for (int diag = -leftTopDelta; diag <= rightBottomDelta - _winningLen + 1; diag++) {
+      for (int diag = -leftTopDelta;
+          diag <= rightBottomDelta - _winningLen + 1;
+          diag++) {
         symbolCount = [0, 0];
         for (int i = 0; i < _winningLen; i++) {
           symbolCount[_board[move.row + diag + i][move.col + diag + i] ?? 0] +=
-          _board[move.row + diag + i][move.col + diag + i] == null ? 0 : 1;
+              _board[move.row + diag + i][move.col + diag + i] == null ? 0 : 1;
         }
         valueDirection = _calculateScore(symbolCount[0], symbolCount[1]);
         if (valueDirection.abs() == winValue) {
@@ -151,17 +183,23 @@ class GameBoard {
 
     // diagonal right_up-left_down
     int rightTopDelta = min(
-        (move.col + _winningLen - 1) < _cols ? _winningLen : _cols - move.col - 1,
+        (move.col + _winningLen - 1) < _cols
+            ? _winningLen
+            : _cols - move.col - 1,
         (move.row - _winningLen + 1) >= 0 ? _winningLen - 1 : move.row);
     int leftBottomDelta = min(
         (move.col - _winningLen + 1) >= 0 ? _winningLen - 1 : move.col,
-        (move.row + _winningLen - 1) < _rows ? _winningLen : _rows - move.row - 1);
+        (move.row + _winningLen - 1) < _rows
+            ? _winningLen
+            : _rows - move.row - 1);
     if (rightTopDelta + leftBottomDelta + 1 >= _winningLen) {
-      for (int diag = -rightTopDelta; diag <= leftBottomDelta - _winningLen + 1; diag++) {
+      for (int diag = -rightTopDelta;
+          diag <= leftBottomDelta - _winningLen + 1;
+          diag++) {
         symbolCount = [0, 0];
         for (int i = 0; i < _winningLen; i++) {
           symbolCount[_board[move.row + diag + i][move.col - diag - i] ?? 0] +=
-          _board[move.row + diag + i][move.col - diag - i] == null ? 0 : 1;
+              _board[move.row + diag + i][move.col - diag - i] == null ? 0 : 1;
         }
         valueDirection = _calculateScore(symbolCount[0], symbolCount[1]);
         if (valueDirection.abs() == winValue) {
@@ -185,7 +223,9 @@ class GameBoard {
       if (countO == 0 || countX == 0) {
         if (scoreValues[_winningLen - 3][countO] == winValue ||
             scoreValues[_winningLen - 3][countX] == winValue) {
-          value = scoreValues[_winningLen - 3][countX] == winValue ? winValue : -winValue;
+          value = scoreValues[_winningLen - 3][countX] == winValue
+              ? winValue
+              : -winValue;
           break;
         }
         value -= (i == 0 ? -1 : 1) * scoreValues[_winningLen - 3][countO];

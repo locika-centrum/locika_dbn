@@ -89,7 +89,7 @@ class TicTacToeGameScore extends GameScoreBase {
         _log.fine('GAME OVER: (draw) $this');
       }
     }
-    action = reset;
+    setAction(reset);
 
     super.gameOver();
   }

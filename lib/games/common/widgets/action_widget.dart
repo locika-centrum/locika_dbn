@@ -22,20 +22,24 @@ class ActionWidget extends StatelessWidget {
             ),
             child: Center(
               child: IconButton(
-                  onPressed: context.select<GameScoreBase, Function?>((value) => value.action) == null
-                      ? null
-                      : () => context.read<GameScoreBase>().action!(),
-                  iconSize: 32,
-                  icon: const Icon(Icons.sync)),
-              // child: Icon(
-              //   Icons.sync,
-              //   size: 32,
-              // ),
+                onPressed: context.select<GameScoreBase, Function?>(
+                            (value) => value.action) ==
+                        null
+                    ? null
+                    : () => context.read<GameScoreBase>().action!(),
+                iconSize: 32,
+                icon: context
+                    .select<GameScoreBase, Icon>((value) => value.actionIcon),
+              ),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.only(top: 8.0),
-            child: Text('Nová hra'),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Text(
+              context
+                  .select<GameScoreBase, String>((value) => value.actionTitle),
+              style: Theme.of(context).textTheme.displaySmall,
+            ),
           ),
         ],
       ),

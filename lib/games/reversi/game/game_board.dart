@@ -19,6 +19,7 @@ class GameBoard {
   late int _rows, _cols;
   late int _symbol;
   late int _availableMoves;
+  late int _validMoves;
   int _boardValue = 0;
   List<int> _symbolCount = [0, 0];
 
@@ -28,6 +29,7 @@ class GameBoard {
   int get cols => _cols;
   int get symbol => _symbol;
   int get availableMoves => _availableMoves;
+  int get validMoves => _validMoves;
   List<int> get symbolCount => _symbolCount;
   bool isInside(int row, int col) =>
       (0 <= row && row < _rows && 0 <= col && col < _cols);
@@ -45,6 +47,7 @@ class GameBoard {
     ];
     _symbolCount = [...source._symbolCount];
     _availableMoves = source._availableMoves;
+    _validMoves = source._validMoves;
     _boardValue = source._boardValue;
   }
 
@@ -95,9 +98,9 @@ class GameBoard {
     }
     board[move.row][move.col] = _symbol;
     _symbolCount[_symbol]++;
-    _availableMoves--;
     move = _evaluateMove(move);
     _symbol = 1 - _symbol;
+    _availableMoves--;
     _recalculateValidMoves();
 
     _log.finest('Move recorded: $move');
@@ -112,6 +115,7 @@ class GameBoard {
   }
 
   void _recalculateValidMoves() {
+    _validMoves = 0;
     for (int row = 0; row < _rows; row++) {
       for (int col = 0; col < _cols; col++) {
         if (_board[row][col] != null) {
@@ -125,9 +129,15 @@ class GameBoard {
           ));
 
           _validPositions[row][col] = possibleTakes.isNotEmpty;
+          _validMoves += possibleTakes.isNotEmpty ? 1 : 0;
         }
       }
     }
+  }
+
+  void skipMove() {
+    _symbol = 1 - _symbol;
+    _recalculateValidMoves();
   }
 
   List<GameMove> evaluateAllTakes(GameMove move) {
@@ -171,18 +181,6 @@ class GameBoard {
         humanPlayer: move.humanPlayer,
       ));
     }
-    return result;
-  }
-
-  List<GameMove> possibleMoves() {
-    List<GameMove> result = [];
-
-    for (int row = 0; row < _rows; row++) {
-      for (int col = 0; col < _cols; col++) {
-        throw UnimplementedError;
-      }
-    }
-
     return result;
   }
 }

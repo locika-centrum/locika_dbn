@@ -11,6 +11,8 @@ import '../../../settings/model/settings_data.dart';
 
 Logger _log = Logger('Reversi game_board_widget.dart');
 
+enum MoveResult { win, draw, loss, pass }
+
 class GameBoardWidget extends StatefulWidget {
   final int gameSize;
 
@@ -27,10 +29,12 @@ class _GameBoardWidgetState extends State<GameBoardWidget> {
   late GameBoard gameBoard;
   late bool isLocked;
   late PlayerAI playerAI;
+  bool pass = false;
 
   @override
   void didChangeDependencies() {
-    if (Provider.of<GameScoreBase>(context).lastMove == null) {
+    _log.finest('didChangeDependencies');
+    if (Provider.of<GameScoreBase>(context).lastMove == null && !pass) {
       _log.finest('*** NEW GAME ***');
       gameBoard = GameBoard(size: widget.gameSize);
       playerAI =
@@ -101,6 +105,28 @@ class _GameBoardWidgetState extends State<GameBoardWidget> {
     );
   }
 
+  void _skipMove() {
+    _log.finest('*** PASS CONFIRMED ${gameBoard.symbol == playerAI.symbol ? 'Computer' : 'Human'}');
+    gameBoard.skipMove();
+    context.read<GameScoreBase>().setAction(null);
+
+    _log.finest('*** NEXT PLAYER IS ${gameBoard.symbol == playerAI.symbol ? 'Computer' : 'Human'}');
+    _log.finest('VALID MOVES: ${gameBoard.validMoves}');
+
+    // Computer if it was the Human pass
+    if (gameBoard.symbol == playerAI.symbol) {
+      Future.delayed(const Duration(milliseconds: 50), () {
+        _computerMove();
+      });
+    } else if (gameBoard.validMoves == 0) {
+      // Two skips - game over
+      _isEndMove(null);
+    }
+
+    isLocked = false;
+    setState(() {});
+  }
+
   void _gridItemTapped(int row, int col) {
     if (!isLocked && gameBoard.validPositions[row][col]) {
       isLocked = true;
@@ -122,32 +148,67 @@ class _GameBoardWidgetState extends State<GameBoardWidget> {
     }
   }
 
-  bool _computerMove() {
+  void _computerMove() {
+    _log.finest('Computer moves');
     isLocked = true;
 
-    return _isEndMove(playerAI.move(gameBoard)!);
+    GameMove? move = playerAI.move(gameBoard);
+    if (!_isEndMove(move)) {
+      if (move != null) {
+        if (gameBoard.validMoves == 0) {
+
+          // Human cannot play - forced pass
+          _isEndMove(null);
+          /*
+          if (!_isEndMove(null)) {
+            Future.delayed(const Duration(milliseconds: 50), () {
+              _computerMove();
+            });
+          }
+           */
+        }
+      }
+    }
   }
 
-  // Returns true if there the last move was not winning or draw
-  bool _isEndMove(GameMove move) {
+  // Return true, if game ends
+  bool _isEndMove(GameMove? move) {
     bool result = false;
+    _log.finest('CHECK MOVE: $move (${gameBoard.symbol} moves)');
 
-    move = gameBoard.recordMove(move);
-
-
-    context.read<GameScoreBase>().move(move);
-
-    if (move.winning) {
-      result = true;
-    } else if (gameBoard.availableMoves == 0) {
-      context.read<GameScoreBase>().gameOver();
-      result = true;
+    // Pass move
+    if (move == null) {
+      _log.finest('${gameBoard.symbol == playerAI.symbol ? 'COMPUTER' : 'HUMAN'} will be forded to pass');
+      if (pass) {
+        _log.finest('Game over: 2x pass');
+        context.read<GameScoreBase>().gameOver();
+        pass = false;
+        result = true;
+      } else {
+        _log.finest('Need to pass - no moves found');
+        pass = true;
+        context
+            .read<GameScoreBase>()
+            .setAction(_skipMove, 'Vynechat');
+      }
     } else {
-      isLocked = false;
+      // Record move
+      pass = false;
+      move = gameBoard.recordMove(move);
+      context.read<GameScoreBase>().move(move);
+
+      // Final move
+      if (move.winning || gameBoard.availableMoves == 0) {
+        context.read<GameScoreBase>().gameOver();
+        result = true;
+      } else {
+        isLocked = false;
+      }
     }
 
     setState(() {});
 
+    _log.finest('End Move: $result - {humanPlayer: ${gameBoard.symbol == playerAI.symbol}, pass: $pass}');
     return result;
   }
 }

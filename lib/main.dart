@@ -9,6 +9,8 @@ import 'screens/chat_splash_screen.dart';
 import 'screens/chat_intro_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/settings_picker_screen.dart';
+import 'screens/chat_menu_screen.dart';
+import 'screens/work_in_progress_screen.dart';
 import 'utils/app_theme.dart';
 
 import 'settings/model/settings_data.dart';
@@ -106,12 +108,50 @@ class MyApp extends StatelessWidget {
       ),
       GoRoute(
         path: '/chat_splash',
-        builder: (context, state) => const ChatSplashScreen(),
+        //builder: (context, state) => const ChatSplashScreen(),
+        pageBuilder: (context, state) {
+          // return const ChatSplashScreen();
+          return CustomTransitionPage(
+            key: state.pageKey,
+            child: const ChatSplashScreen(),
+            transitionDuration: const Duration(milliseconds: 1500),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(
+                opacity:
+                    CurveTween(curve: Curves.easeInOutCirc).animate(animation),
+                child: child,
+              );
+            },
+          );
+        },
       ),
       GoRoute(
         path: '/chat_intro',
-        builder: (context, state) => const ChatIntroScreen(),
-      )
+        pageBuilder: (context, state) {
+          return CustomTransitionPage(
+            key: state.pageKey,
+            child: const ChatIntroScreen(),
+            transitionDuration: const Duration(milliseconds: 1500),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(
+                opacity:
+                    CurveTween(curve: Curves.easeInOutCirc).animate(animation),
+                child: child,
+              );
+            },
+          );
+        },
+      ),
+      GoRoute(
+        path: '/chat_menu',
+        builder: (context, state) => const ChatMenuScreen(),
+      ),
+      GoRoute(
+        path: '/work_in_progress',
+        builder: (context, state) => const WorkInProgressScreen(),
+      ),
     ],
   );
 
@@ -121,8 +161,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'DBN',
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
+      theme: AppTheme.chatTheme,
+      // darkTheme: AppTheme.chatTheme,
       routeInformationProvider: _router.routeInformationProvider,
       routeInformationParser: _router.routeInformationParser,
       routerDelegate: _router.routerDelegate,

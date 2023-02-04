@@ -77,7 +77,7 @@ class SlidingGameScore extends GameScoreBase {
     } else {
       _log.fine('GAME OVER: $this');
     }
-    action = reset;
+    setAction(reset);
 
     super.gameOver();
   }

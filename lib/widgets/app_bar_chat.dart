@@ -6,13 +6,15 @@ import '../widgets/app_bar_text_button.dart';
 Logger _log = Logger('app_bar_main.dart');
 
 class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const ChatAppBar({Key? key}) : super(key: key);
+  final String route;
+
+  const ChatAppBar({this.route = '', Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       toolbarHeight: 62.0 + 16.0,
-      leading: const AppBarTextButton('Zavřít', ''),
+      leading: AppBarTextButton('Zavřít', route),
       leadingWidth: 64.0,
       title: Image.asset(
         'assets/images/dbn_logo.png',

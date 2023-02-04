@@ -24,14 +24,18 @@ class RecordWidget extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                context.select<GameScoreBase, String>((model) => model.highScore),
-                style: Theme.of(context).textTheme.titleMedium,
+                context
+                    .select<GameScoreBase, String>((model) => model.highScore),
+                style: Theme.of(context).textTheme.displayMedium,
               ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
-            child: Text(title),
+            child: Text(
+              title,
+              style: Theme.of(context).textTheme.displaySmall,
+            ),
           ),
         ],
       ),

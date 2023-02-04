@@ -25,17 +25,24 @@ class ScoreWidget extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: Theme.of(context).textTheme.titleSmall,
+                style: Theme.of(context).textTheme.displaySmall,
               ),
-              Text(
-                  context.select<GameScoreBase, String>((value) => value.gameScore),
-                  style: Theme.of(context).textTheme.titleLarge)
+              FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Text(
+                    context.select<GameScoreBase, String>(
+                        (value) => value.gameScore),
+                    style: Theme.of(context).textTheme.displayLarge),
+              )
             ],
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.only(top: 8.0),
-          child: Text(''),
+        Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Text(
+            '',
+            style: Theme.of(context).textTheme.displaySmall,
+          ),
         ),
       ],
     );

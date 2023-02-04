@@ -43,7 +43,7 @@ class ReversiScreen extends StatelessWidget {
               child: Center(
                 child: Text(
                   title,
-                  style: Theme.of(context).textTheme.headlineMedium,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
             ),

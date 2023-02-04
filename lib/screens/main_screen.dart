@@ -5,6 +5,7 @@ import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
 import '../model/app_menu_item.dart';
+import '../utils/app_theme.dart';
 import '../widgets/app_bar_main.dart';
 
 import '../games/reversi/reversi_screen.dart';
@@ -92,17 +93,20 @@ class _MainScreenState extends State<MainScreen> {
         : const Center();
     _log.finest('Is ready: ${context.read<SettingsData>().isReady}');
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const AppBarMain(),
-        toolbarHeight: 50.0,
-        elevation: 0,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-      ),
-      body: _page,
-      bottomNavigationBar: BottomNavigationBarMain(menuItems, _onMenuChange),
-    );
+    return Theme(
+        data: AppTheme.gameTheme,
+        child: Scaffold(
+          appBar: AppBar(
+            title: const AppBarMain(),
+            toolbarHeight: 50.0,
+            elevation: 0,
+            backgroundColor: Colors.white,
+            foregroundColor: Colors.black,
+          ),
+          body: _page,
+          bottomNavigationBar:
+              BottomNavigationBarMain(menuItems, _onMenuChange),
+        ));
   }
 
   void _onMenuChange(int index) {

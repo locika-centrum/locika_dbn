@@ -11,12 +11,13 @@ class PlayerAI {
 
   PlayerAI(this.symbol);
 
-  GameMove move(GameBoard board) {
+  GameMove? move(GameBoard board) {
     final random = Random();
+    List<GameMove> bestMoves;
 
-    List<GameMove> possibleMoves = _possibleMoves(board);
+    bestMoves = _possibleMoves(board);
 
-    return possibleMoves[random.nextInt(possibleMoves.length)];
+    return bestMoves.isEmpty ? null : bestMoves[random.nextInt(bestMoves.length)];
   }
 
   List<GameMove> _possibleMoves(GameBoard board) {

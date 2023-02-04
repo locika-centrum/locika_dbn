@@ -37,7 +37,27 @@ abstract class GameScoreBase with ChangeNotifier, HiveObjectMixin {
     notifyListeners();
   }
 
-  void Function()? action;
+  void Function()? _action;
+  Function? get action => _action;
+
+  String _actionTitle = 'Nová hra';
+  String get actionTitle => _actionTitle;
+  set actionTitle(String title) {
+    _actionTitle = title;
+    notifyListeners();
+  }
+
+  Icon _actionIcon = const Icon(Icons.sync);
+  Icon get actionIcon => _actionIcon;
+
+  void setAction(Function()? action, [String title = 'Nová hra']) {
+    _actionIcon =
+        title == 'Nová hra' ? const Icon(Icons.sync) : const Icon(Icons.skip_next);
+    _action = action;
+
+    actionTitle = title;
+  }
+
   GameMoveBase? lastMove;
 
   void gameOver() {
@@ -54,8 +74,10 @@ abstract class GameScoreBase with ChangeNotifier, HiveObjectMixin {
   }
 
   void reset() {
+    _log.finest('reset');
     lastMove = null;
-    action = null;
+    _action = null;
+    actionTitle = 'Nová hra';
     noOfMoves = 0;
 
     notifyListeners();

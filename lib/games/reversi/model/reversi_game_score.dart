@@ -66,16 +66,21 @@ class ReversiGameScore extends GameScoreBase {
     save();
   }
 
+  // Calculated score values (override)
   @override
-  String get highScore => '$noOfGames';
+  String get gameScore => '$humanScore:$aiScore';
 
+  @override
+  String get highScore => '$noOfWins:$noOfLosses';
+
+  int humanScore = 0;
+  int aiScore = 0;
 
   @override
   void move(GameMoveBase? move) {
     GameMove? currentMove = move as GameMove?;
-    int humanScore;
-    int aiScore;
 
+    _log.finest('Move is: $move');
     if (currentMove != null) {
       if (currentMove.humanPlayer) {
         humanScore = currentMove.symbol == 1 ? currentMove.blackScore : currentMove.whiteScore;
@@ -84,8 +89,6 @@ class ReversiGameScore extends GameScoreBase {
         humanScore = currentMove.symbol == 0 ? currentMove.blackScore : currentMove.whiteScore;
         aiScore = currentMove.symbol == 1 ? currentMove.blackScore : currentMove.whiteScore;
       }
-
-      gameScore = '$humanScore:$aiScore';
     }
 
     super.move(move);
@@ -97,20 +100,21 @@ class ReversiGameScore extends GameScoreBase {
   // reset      ... resets score and action button
   @override
   void gameOver() {
-    GameMove? move = lastMove as GameMove?;
+    noOfWins += humanScore > aiScore ? 1 : 0;
+    noOfLosses += aiScore > humanScore ? 1 : 0;
+    _log.finest('GAME OVER: {noOfGames: $noOfGames, highScore: $highScore}');
 
-    if (move != null) {
-      if (move.winning) {
-        noOfWins += move.humanPlayer ? 1 : 0;
-        noOfLosses += move.humanPlayer ? 0 : 1;
-        _log.fine('GAME OVER: (${move.humanPlayer ? "win" : "loss"}) $this');
-      } else {
-        _log.fine('GAME OVER: (draw) $this');
-      }
-    }
-    action = reset;
+    setAction(reset);
 
     super.gameOver();
+  }
+
+  @override
+  void reset() {
+    humanScore = 2;
+    aiScore = 2;
+
+    super.reset();
   }
 
   @override

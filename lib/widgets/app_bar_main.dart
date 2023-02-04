@@ -23,7 +23,8 @@ class AppBarMain extends StatelessWidget {
           ),
           onLongPressStart: (_) {
             timer = Timer(const Duration(milliseconds: 500), () {
-              GoRouter.of(context).push('/chat_splash');
+              // GoRouter.of(context).push('/chat_splash');
+              context.go('/chat_splash');
             });
           },
           onLongPressEnd: (_) => timer?.cancel(),

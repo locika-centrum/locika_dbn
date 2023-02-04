@@ -97,7 +97,7 @@ class PlayerAI {
 
     for (int row = 0; row < board.rows; row++) {
       for (int col = 0; col < board.cols; col++) {
-        if (board.board[row][col] == null) {
+        if (board.board[row][col] == null && board.surrounding[row][col]) {
           result.add(GameMove(
               row: row, col: col, symbol: board.symbol, humanPlayer: false));
         }

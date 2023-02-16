@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -39,8 +41,8 @@ class SlidingScreen extends StatelessWidget {
         },
         child: Column(
           children: [
-            Expanded(
-              flex: 1,
+            Padding(
+              padding: const EdgeInsets.only(top: 24.0),
               child: Center(
                 child: Text(
                   title,
@@ -49,24 +51,30 @@ class SlidingScreen extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 5,
-              child: GameBoardWidget(
-                gameSize: context.read<SettingsData>().gameSize,
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final size = min(constraints.maxWidth, constraints.maxHeight);
+                  return Align(
+                    alignment: Alignment.center,
+                    child: SizedBox(
+                      height: size,
+                      width: size,
+                      child: GameBoardWidget(gameSize: context.read<SettingsData>().gameSize),
+                    ),
+                  );
+                },
               ),
             ),
-            Expanded(
-              flex: 2,
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: const [
-                    RecordWidget(),
-                    ScoreWidget(
-                      title: 'Tahů',
-                    ),
-                    ActionWidget(),
-                  ],
-                ),
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: const [
+                  RecordWidget(),
+                  ScoreWidget(
+                    title: 'Tahů',
+                  ),
+                  ActionWidget(),
+                ],
               ),
             )
           ],

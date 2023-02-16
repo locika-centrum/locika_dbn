@@ -9,7 +9,7 @@ class InfoPageScaffold extends StatelessWidget {
   final Widget? bottomButton;
 
   const InfoPageScaffold({
-    this.route = '',
+    this.route = '/',
     required this.title,
     required this.body,
     this.bottomButton,
@@ -22,22 +22,18 @@ class InfoPageScaffold extends StatelessWidget {
       appBar: ChatAppBar(
         route: route,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: Theme.of(context).textTheme.displayLarge,
+      body: Stack(
+        children: [
+          body,
+          if (bottomButton != null)
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 32.0, bottom: 8.0, left: 8.0, right: 8.0),
+                child: SafeArea(child: bottomButton!),
+              ),
             ),
-            body,
-            if (bottomButton != null)
-              const Spacer(),
-            if (bottomButton != null)
-              SafeArea(child: bottomButton!),
-          ],
-        ),
+        ],
       ),
     );
   }

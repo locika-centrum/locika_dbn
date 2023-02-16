@@ -23,7 +23,7 @@ class SettingsPickerScreen extends StatelessWidget {
         elevation: 0,
         title: Text(
           'Nastavení',
-          style: Theme.of(context).textTheme.headlineMedium,
+          style: Theme.of(context).textTheme.titleLarge,
         ),
       ),
       body: SettingsList(

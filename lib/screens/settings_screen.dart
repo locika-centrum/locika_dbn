@@ -49,27 +49,66 @@ class SettingsScreen extends StatelessWidget {
                 },
               ),
               SettingsTile.switchTile(
-                initialValue: context.select<SettingsData, bool>((value) => value.tictactoeStartsHuman),
-                leading: Image.asset('assets/images/game_icon_01.png', color: Colors.grey, height: 24,),
+                initialValue: context.select<SettingsData, bool>(
+                    (value) => value.tictactoeStartsHuman),
+                leading: Image.asset(
+                  'assets/images/game_icon_01.png',
+                  color: Colors.grey,
+                  height: 24,
+                ),
                 title: const Text('Piškvorky: začíná hráč'),
                 onToggle: (value) {
                   context.read<SettingsData>().tictactoeStartsHuman = value;
                 },
               ),
               SettingsTile.switchTile(
-                initialValue: context.select<SettingsData, bool>((value) => value.slidingPictures),
-                leading: Image.asset('assets/images/game_icon_02.png', color: Colors.grey, height: 24,),
+                initialValue: context.select<SettingsData, bool>(
+                    (value) => value.slidingPictures),
+                leading: Image.asset(
+                  'assets/images/game_icon_02.png',
+                  color: Colors.grey,
+                  height: 24,
+                ),
                 title: const Text('Puzzle: obrázky'),
                 onToggle: (value) {
                   context.read<SettingsData>().slidingPictures = value;
                 },
               ),
               SettingsTile.switchTile(
-                initialValue: context.select<SettingsData, bool>((value) => value.reversiStartsHuman),
-                leading: Image.asset('assets/images/game_icon_03.png', color: Colors.grey, height: 24,),
+                initialValue: context.select<SettingsData, bool>(
+                    (value) => value.reversiStartsHuman),
+                leading: Image.asset(
+                  'assets/images/game_icon_03.png',
+                  color: Colors.grey,
+                  height: 24,
+                ),
                 title: const Text('Reversi: začíná hráč'),
                 onToggle: (value) {
                   context.read<SettingsData>().reversiStartsHuman = value;
+                },
+              ),
+            ],
+          ),
+          SettingsSection(
+            title: const Text('Chat'),
+            tiles: [
+              SettingsTile.navigation(
+                leading: const Icon(Icons.person),
+                title: const Text('Přezdívka'),
+                value: Text(context
+                    .select<SettingsData, String>((value) => value.nickName)),
+                onPressed: (context) {
+                  GoRouter.of(context).push(
+                    '/settings_text',
+                    extra: SettingsTextData(
+                      title: 'Přezdívka',
+                      text: context.read<SettingsData>().nickName,
+                      onChange: (String name) {
+                        context.read<SettingsData>().nickName = name;
+                        _log.finest('New nick name: $name');
+                      },
+                    ),
+                  );
                 },
               ),
             ],

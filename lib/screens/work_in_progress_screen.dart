@@ -14,7 +14,7 @@ class WorkInProgressScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.only(top: 64.0, left: 32.0, right: 32.0),
         child: Center(
-          child: Lottie.asset('assets/images/animations/programming-error.json'),
+          child: Lottie.asset('assets/animations/programming-error.json'),
         ),
       ),
     );

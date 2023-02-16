@@ -42,6 +42,8 @@ class _BottomNavigationBarMainState extends State<BottomNavigationBarMain> {
 
     return ConvexAppBar(
       style: TabStyle.react,
+      top: -16.0,
+      curveSize: 64.0,
       backgroundColor: const Color(0xff000000),
       items: items,
       initialActiveIndex: _currentIndex,

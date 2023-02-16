@@ -14,7 +14,7 @@ class AppBarTextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () {
-        context.go('/');
+        context.go(route);
       },
       child: Text(
         title,

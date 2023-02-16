@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:logging/logging.dart';
@@ -30,7 +32,8 @@ class TicTacToeScreen extends StatelessWidget {
       backgroundColor: backgroundColor,
       body: FutureProvider<TicTacToeGameScore>(
         create: (BuildContext context) async {
-          return TicTacToeGameScore.loadData(context.read<SettingsData>().gameSize);
+          return TicTacToeGameScore.loadData(
+              context.read<SettingsData>().gameSize);
         },
         initialData: TicTacToeGameScore(),
         builder: (context, child) {
@@ -41,8 +44,8 @@ class TicTacToeScreen extends StatelessWidget {
         },
         child: Column(
           children: [
-            Expanded(
-              flex: 1,
+            Padding(
+              padding: const EdgeInsets.only(top: 24.0),
               child: Center(
                 child: Text(
                   title,
@@ -51,20 +54,30 @@ class TicTacToeScreen extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 5,
-              child: GameBoardWidget(gameSize: context.read<SettingsData>().gameSize),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final size = min(constraints.maxWidth, constraints.maxHeight);
+                  return Align(
+                    alignment: Alignment.center,
+                    child: SizedBox(
+                      height: size,
+                      width: size,
+                      child: GameBoardWidget(gameSize: context.read<SettingsData>().gameSize),
+                    ),
+                  );
+                },
+              ),
             ),
-            Expanded(
-              flex: 2,
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: const [
-                    RecordWidget(title: 'Počet her',),
-                    ScoreWidget(),
-                    ActionWidget(),
-                  ],
-                ),
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: const [
+                  RecordWidget(
+                    title: 'Počet her',
+                  ),
+                  ScoreWidget(),
+                  ActionWidget(),
+                ],
               ),
             )
           ],

@@ -21,9 +21,11 @@ class PlayerAI {
     int moveValue;
 
     List<GameMove> possibleMoves = _possibleMoves(board);
+    assert(possibleMoves.isNotEmpty);
 
     for (GameMove move in possibleMoves) {
       moveValue = _minMax(board, move, board.size < 2 ? 4 : 3);
+      // moveValue = _minMax(board, move, 4);
       move.value = moveValue;
 
       // Evaluate the move value
@@ -35,7 +37,9 @@ class PlayerAI {
         bestMoves.add(move);
       }
     }
-    _log.finest('BEST MOVES: {count: ${bestMoves.length}, value: ${bestMoves[0].value}}');
+    _log.finest(
+        'BEST MOVES: {count: ${bestMoves.length}, value: ${bestMoves[0].value}}');
+    _log.finest(bestMoves);
     result = bestMoves[random.nextInt(bestMoves.length)];
 
     return result;
@@ -56,12 +60,15 @@ class PlayerAI {
     bestMoveValue = move.value;
 
     // Check limit cases
-    if (depth > 0 && move.value.abs() < winValue && boardCopy.availableMoves > 0) {
+    if (depth > 0 &&
+        move.value.abs() < winValue &&
+        boardCopy.availableMoves > 0) {
       if (maximizingPlayer) {
         bestMoveValueAI = -infinity;
 
         for (GameMove nextMove in _possibleMoves(boardCopy)) {
-          moveValue = _minMax(boardCopy, nextMove, depth - 1, alpha, beta, false);
+          moveValue =
+              _minMax(boardCopy, nextMove, depth - 1, alpha, beta, false);
           if (bestMoveValueAI < _myValue(moveValue)) {
             bestMoveValue = moveValue;
             bestMoveValueAI = _myValue(moveValue);
@@ -71,12 +78,12 @@ class PlayerAI {
           if (beta <= alpha) break;
         }
         // _log.finest('maximizingPlayer - ${board.symbol == symbol ? 'AI' : 'Human'} ... best move: $bestMoveValue (AI move value: $bestMoveValueAI)');
-
       } else {
         bestMoveValueAI = infinity;
 
         for (GameMove nextMove in _possibleMoves(boardCopy)) {
-          moveValue = _minMax(boardCopy, nextMove, depth - 1, alpha, beta, true);
+          moveValue =
+              _minMax(boardCopy, nextMove, depth - 1, alpha, beta, true);
           if (_myValue(moveValue) < bestMoveValueAI) {
             bestMoveValue = moveValue;
             bestMoveValueAI = _myValue(moveValue);
@@ -99,9 +106,40 @@ class PlayerAI {
       for (int col = 0; col < board.cols; col++) {
         if (board.board[row][col] == null && board.surrounding[row][col]) {
           result.add(GameMove(
-              row: row, col: col, symbol: board.symbol, humanPlayer: false));
+            row: row,
+            col: col,
+            symbol: board.symbol,
+            humanPlayer: false,
+          ));
         }
       }
+    }
+
+    // First move is the computer move
+    if (result.isEmpty && board.availableMoves == board.rows * board.cols) {
+      _log.finest('Finding first move: {rows: ${board.rows}, cols: ${board.cols}} - ${(board.rows - 1) / 2}, ${(board.cols - 1) / 2} - ${(board.rows - 1) ~/ 2}, ${(board.cols - 1) ~/ 2}');
+
+      for (int row = (board.rows - 1) ~/ 2 - 1; row < (board.rows - 1) ~/ 2 + 1; row++) {
+        for (int col = (board.cols - 1) ~/ 2 - 1; col < (board.rows - 1) ~/ 2 + 1; col++) {
+          if (board.board[row][col] == null) {
+            result.add(GameMove(
+              row: row,
+              col: col,
+              symbol: board.symbol,
+              humanPlayer: false,
+            ));
+          }
+        }
+      }
+
+      /*
+      result.add(GameMove(
+        row: (board.rows - 1) ~/ 2,
+        col: (board.cols - 1) ~/ 2,
+        symbol: board.symbol,
+        humanPlayer: false,
+      ));
+       */
     }
 
     return result;

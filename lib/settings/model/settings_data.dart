@@ -56,15 +56,27 @@ class SettingsData extends ChangeNotifier with HiveObjectMixin {
     save();
   }
 
-  SettingsData(
-      {int gameSize = 0,
-      bool slidingPictures = false,
-      bool tictactoeStartsHuman = true,
-      bool reversiStartsHuman = true})
-      : _gameSize = gameSize,
+  @HiveField(4, defaultValue: '')
+  String _nickName;
+  String get nickName => _nickName;
+  set nickName(String name) {
+    _nickName = name;
+    notifyListeners();
+
+    save();
+  }
+
+  SettingsData({
+    int gameSize = 0,
+    bool slidingPictures = false,
+    bool tictactoeStartsHuman = true,
+    bool reversiStartsHuman = true,
+    String nickName = '',
+  })  : _gameSize = gameSize,
         _slidingPictures = slidingPictures,
         _tictactoeStartsHuman = tictactoeStartsHuman,
-        _reversiStartsHuman = reversiStartsHuman;
+        _reversiStartsHuman = reversiStartsHuman,
+        _nickName = nickName;
 
   @override
   String toString() {
@@ -82,6 +94,18 @@ class SettingsPickerData {
     required this.title,
     required this.options,
     required this.selectedOption,
+    required this.onChange,
+  });
+}
+
+class SettingsTextData {
+  final String title;
+  final String text;
+  final Function onChange;
+
+  SettingsTextData({
+    required this.title,
+    required this.text,
     required this.onChange,
   });
 }

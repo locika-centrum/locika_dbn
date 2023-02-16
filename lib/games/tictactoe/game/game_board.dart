@@ -18,8 +18,8 @@ class GameBoard {
   final List<Map<String, int>> _sizes = [
     {'size': 0, 'rows': 3, 'cols': 3, 'winning-len': 3},
     {'size': 1, 'rows': 5, 'cols': 5, 'winning-len': 4},
-    {'size': 2, 'rows': 8, 'cols': 8, 'winning-len': 5},
-    {'size': 3, 'rows': 10, 'cols': 10, 'winning-len': 5},
+    {'size': 2, 'rows': 7, 'cols': 7, 'winning-len': 5},
+    {'size': 3, 'rows': 11, 'cols': 11, 'winning-len': 5},
   ];
 
   late List<List<int?>> _board;

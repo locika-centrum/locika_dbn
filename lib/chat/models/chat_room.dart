@@ -3,6 +3,7 @@ class ChatRoom {
   late String name;
   late String status;
   late String? advisorID;
+  String? chatID;
 
   ChatRoom({required this.roomUri, required this.name, required this.status}) {
     name = name.replaceAll('"', '');
@@ -13,5 +14,5 @@ class ChatRoom {
   }
 
   @override
-  String toString() => '$name [$status] - $advisorID';
+  String toString() => '$name [$status] - {advisorID: $advisorID, chatID: $chatID}';
 }

@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:locika_dbn_test/chat/models/chat_response.dart';
+import 'package:locika_dbn_test/chat/services/neziskovky_parser.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
@@ -36,22 +40,6 @@ Future<void> main() async {
   // Initialize hive database
   await initHive();
 
-  // runApp(const MyApp());
-  /*
-  runApp(
-    FutureProvider<SettingsData>(
-      create: (BuildContext context) => loadSettingsData(),
-      initialData: SettingsData(),
-      builder: (context, child) {
-        return ChangeNotifierProvider<SettingsData>.value(
-          value: Provider.of<SettingsData>(context),
-          child: child,
-        );
-      },
-      child: const MyApp(),
-    ),
-  );
-  */
   runApp(
     MultiProvider(
       providers: [
@@ -82,7 +70,7 @@ Future<void> main() async {
 }
 
 Future<void> initLogger() async {
-  Logger.root.level = Level.FINE;
+  Logger.root.level = Level.ALL;
 
   Logger.root.onRecord.listen((record) {
     print(
@@ -211,19 +199,30 @@ class MyApp extends StatelessWidget {
         builder: (context, state) => const ChatMenuScreen(),
       ),
       GoRoute(
-        path: '/login',
-        builder: (context, state) => ChatLoginScreen(
-          nickName: context.read<SettingsData>().nickName,
-        ),
-      ),
+          path: '/login',
+          builder: (context, state) {
+            _log.finest('cookie: ${context.read<SessionData>().cookie}');
+            getChatRooms(cookie: context.read<SessionData>().cookie)
+                .then((value) {
+              _log.finest('Response: $value, cookie: ${context.read<SessionData>().cookie}');
+            });
+
+            return ChatLoginScreen(
+              nickName: context.read<SettingsData>().nickName,
+            );
+          }),
       GoRoute(
         path: '/register',
         builder: (context, state) => const ChatSignUpScreen(),
       ),
       GoRoute(
-        path: '/chat',
-        builder: (context, state) => const ChatScreen(),
-      ),
+          path: '/chat',
+          builder: (context, state) {
+            Cookie cookie = state.extra as Cookie;
+            return ChatScreen(
+              cookie: cookie,
+            );
+          }),
       GoRoute(
         path: '/about_chat',
         builder: (context, state) => const AboutChatScreen(),

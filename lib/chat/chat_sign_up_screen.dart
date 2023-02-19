@@ -10,6 +10,7 @@ class ChatSignUpScreen extends StatefulWidget {
 class _ChatSignUpScreenState extends State<ChatSignUpScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+    );
   }
 }

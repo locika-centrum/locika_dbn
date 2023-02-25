@@ -7,10 +7,12 @@ class MenuActionPanel extends StatelessWidget {
   final Widget? actionButton;
   final String? hintText;
   final String? hintRoute;
+  final Color backgroundColor;
 
   const MenuActionPanel({
     required this.title,
     required this.text,
+    this.backgroundColor = const Color(0xffe9e9eb),
     this.actionButton,
     this.hintText,
     this.hintRoute,
@@ -20,12 +22,18 @@ class MenuActionPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+      padding: const EdgeInsets.symmetric(
+        vertical: 8.0,
+        horizontal: 8.0,
+      ),
       child: Container(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(
+          vertical: 16.0,
+          horizontal: 24.0,
+        ),
         width: double.infinity,
         decoration: BoxDecoration(
-          color: Colors.grey.shade200,
+          color: backgroundColor,
           borderRadius: BorderRadius.circular(8.0),
         ),
         child: Column(
@@ -48,7 +56,6 @@ class MenuActionPanel extends StatelessWidget {
                     children: [
                       const Icon(
                         Icons.lightbulb_outline,
-                        color: Colors.blue,
                       ),
                       Text(
                         '  ${hintText!}',

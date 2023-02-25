@@ -10,7 +10,7 @@ Ubližují si tvoji blízcí navzájem nebo přímo ubližují tobě?
 
 ![dnb](resource:assets/images/kluk_pod_posteli.png#1000x150)
 
-Neboj se, nejsi v tom sám/a.
+**Neboj se, nejsi v tom sám/a.**
 \
 \
 Není to tvoje vina. Násilí doma není v pořádku.

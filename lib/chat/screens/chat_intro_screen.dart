@@ -1,24 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:logging/logging.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:go_router/go_router.dart';
 
-import '../widgets/info_page_scaffold.dart';
+import '../../widgets/info_page_scaffold.dart';
 
-Logger _log = Logger('about_chat_screen.dart');
-
-class AboutChatScreen extends StatelessWidget {
-  const AboutChatScreen({Key? key}) : super(key: key);
+class ChatIntroScreen extends StatelessWidget {
+  const ChatIntroScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InfoPageScaffold(
-      title: 'O chatu',
+      route: '/',
       body: FutureBuilder(
         future: rootBundle.loadString('assets/texts/about_chat.md'),
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           if (snapshot.hasData) {
-            _log.finest('Snapshot data: ${snapshot.data}');
             return Markdown(
               data: snapshot.data!,
               styleSheet: MarkdownStyleSheet(
@@ -32,6 +29,21 @@ class AboutChatScreen extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         },
+      ),
+      bottomButton: OutlinedButton(
+        onPressed: () => context.go('/chat_menu'),
+        style: OutlinedButton.styleFrom(
+          backgroundColor: Colors.black,
+          foregroundColor: Colors.white,
+          minimumSize: const Size.fromHeight(48.0),
+          shape: const StadiumBorder(),
+        ),
+        child: Text(
+          'Pokračovat',
+          style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                color: Colors.white,
+              ),
+        ),
       ),
     );
   }

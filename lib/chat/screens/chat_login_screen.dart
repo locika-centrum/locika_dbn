@@ -1,16 +1,13 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
-import '../settings/model/settings_data.dart';
-import '../widgets/app_bar_chat.dart';
-import 'models/chat_response.dart';
-import 'models/session_data.dart';
-import 'services/neziskovky_parser.dart';
+import '../../settings/model/settings_data.dart';
+import '../../widgets/app_bar_chat.dart';
+import '../models/chat_response.dart';
+import '../models/session_data.dart';
+import '../services/neziskovky_parser.dart';
 
 Logger _log = Logger('chat_login_screen.dart');
 
@@ -49,21 +46,25 @@ class _ChatLoginScreenState extends State<ChatLoginScreen> {
       body: Padding(
         padding: const EdgeInsets.only(left: 24, right: 24),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SvgPicture.asset('assets/images/locika_logo.svg'),
-            const SizedBox(height: 48.0),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Text(
+                'Přihlaš se',
+                style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
             TextField(
               controller: _nickNameController,
               autofocus: false,
               decoration: const InputDecoration(
                 hintText: 'Přezdívka',
                 labelText: 'Přezdívka',
-                contentPadding:
-                    EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFee7b64), width: 1),
-                ),
+                contentPadding: EdgeInsets.fromLTRB(0.0, 10.0, 20.0, 10.0),
               ),
             ),
             const SizedBox(height: 16.0),
@@ -75,10 +76,7 @@ class _ChatLoginScreenState extends State<ChatLoginScreen> {
                 hintText: 'Heslo',
                 labelText: 'Heslo',
                 contentPadding:
-                    const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                border: const OutlineInputBorder(
-                //  borderSide: BorderSide(color: Color(0xFFee7b64), width: 1),
-                ),
+                    const EdgeInsets.fromLTRB(0.0, 10.0, 20.0, 10.0),
                 errorText: _isValidForm ? null : 'Chybné heslo nebo přezdívka',
                 suffixIcon: IconButton(
                   icon: Icon(_passwordVisible
@@ -92,46 +90,17 @@ class _ChatLoginScreenState extends State<ChatLoginScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 24.0),
+            const Spacer(),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: OutlinedButton(
-                onPressed: () async {
-                  context.read<SettingsData>().nickName =
-                      _nickNameController.text;
-                  ChatResponse result = await authenticate(
-                    username: _nickNameController.text,
-                    password: _passwordController.text,
-                  );
-
-                  if (context.mounted) {
-                    switch (result.statusCode) {
-                      case 200:
-                        _isValidForm = true;
-                        context.read<SessionData>().cookie = result.cookie;
-                        _log.finest('Storing cookie: ${result.cookie}');
-
-                        context.go(
-                          '/chat',
-                          extra: result.cookie,
-                        );
-                        break;
-
-                      case 401:
-                        setState(() {
-                          _isValidForm = false;
-                        });
-                        break;
-
-                      default:
-                        context.go('/work_in_progress');
-                    }
-                  }
-                },
+                onPressed: () async => login(),
                 style: OutlinedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    foregroundColor: Colors.white,
-                    minimumSize: const Size.fromHeight(48.0)),
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size.fromHeight(48.0),
+                  shape: const StadiumBorder(),
+                ),
                 child: Text(
                   'Přihlásit se',
                   style: Theme.of(context).textTheme.displaySmall?.copyWith(
@@ -140,15 +109,63 @@ class _ChatLoginScreenState extends State<ChatLoginScreen> {
                 ),
               ),
             ),
-            TextButton(
-              onPressed: () {
-                context.go('/work_in_progress');
-              },
-              child: Text('Registruj se'),
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: OutlinedButton(
+                  onPressed: () => context.go('/sign_up'),
+                  style: OutlinedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.black,
+                    minimumSize: const Size.fromHeight(48.0),
+                    shape: const StadiumBorder(),
+                  ),
+                  child: Text(
+                    'Ještě nemám účet',
+                    style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> login() async {
+    context.read<SettingsData>().nickName = _nickNameController.text;
+    ChatResponse result = await authenticate(
+      username: _nickNameController.text,
+      password: _passwordController.text,
+    );
+
+    if (context.mounted) {
+      switch (result.statusCode) {
+        case 200:
+          _isValidForm = true;
+          context
+              .read<SessionData>()
+              .cookie = result.cookie;
+          _log.finest('Storing cookie: ${result.cookie}');
+
+          context.go(
+            '/chat',
+            extra: result.cookie,
+          );
+          break;
+
+        case 401:
+          setState(() {
+            _isValidForm = false;
+          });
+          break;
+
+        default:
+          context.go('/work_in_progress');
+      }
+    }
   }
 }

@@ -54,9 +54,8 @@ class DateChip extends StatelessWidget {
       result = DateFormat.yMMMMd(Platform.localeName).format(date);
     }
 
-    result = DateFormat.yMMMMd(Platform.localeName).format(date);
     if (includeTime) {
-      result += ' ${DateFormat('hh:mm').format(date)}';
+      result += ' ${DateFormat.Hm().format(date)}';
     }
 
     return result;

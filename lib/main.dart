@@ -3,23 +3,24 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:locika_dbn_test/chat/models/chat_response.dart';
-import 'package:locika_dbn_test/chat/services/neziskovky_parser.dart';
 import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
 import 'screens/main_screen.dart';
-import 'screens/chat_splash_screen.dart';
-import 'screens/chat_intro_screen.dart';
+import 'chat/screens/chat_splash_screen.dart';
+import 'chat/screens/chat_intro_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/settings_picker_screen.dart';
 import 'screens/settings_text_screen.dart';
-import 'screens/chat_menu_screen.dart';
+import 'chat/screens/chat_menu_screen.dart';
 import 'screens/work_in_progress_screen.dart';
-import 'chat/chat_screen.dart';
-import 'chat/about_chat_screen.dart';
-import 'chat/chat_login_screen.dart';
-import 'chat/chat_sign_up_screen.dart';
+import 'chat/screens/chat_screen.dart';
+import 'chat/screens/about_chat_screen.dart';
+import 'chat/screens/chat_login_screen.dart';
+import 'chat/screens/chat_sign_up_screen.dart';
+import 'chat/models/chat_response.dart';
+import 'chat/screens/about_call_police_screen.dart';
+import 'chat/services/neziskovky_parser.dart';
 
 import 'utils/app_theme.dart';
 import 'settings/model/settings_data.dart';
@@ -200,25 +201,28 @@ class MyApp extends StatelessWidget {
       ),
       GoRoute(
           path: '/login',
-          builder: (context, state) {
-            _log.finest('cookie: ${context.read<SessionData>().cookie}');
-            getChatRooms(cookie: context.read<SessionData>().cookie)
-                .then((value) {
-              _log.finest('Response: $value, cookie: ${context.read<SessionData>().cookie}');
-            });
+          redirect: (context, state) async {
+            ChatResponse response = await checkAuthorized(
+                cookie: context.read<SessionData>().cookie);
 
+            if (response.statusCode == HttpStatus.ok) {
+              _log.fine('Cookie is valid, skipping login');
+              return '/chat';
+            }
+          },
+          builder: (context, state) {
             return ChatLoginScreen(
               nickName: context.read<SettingsData>().nickName,
             );
           }),
       GoRoute(
-        path: '/register',
+        path: '/sign_up',
         builder: (context, state) => const ChatSignUpScreen(),
       ),
       GoRoute(
           path: '/chat',
           builder: (context, state) {
-            Cookie cookie = state.extra as Cookie;
+            Cookie cookie = (state.extra ?? context.read<SessionData>().cookie) as Cookie;
             return ChatScreen(
               cookie: cookie,
             );
@@ -226,6 +230,10 @@ class MyApp extends StatelessWidget {
       GoRoute(
         path: '/about_chat',
         builder: (context, state) => const AboutChatScreen(),
+      ),
+      GoRoute(
+        path: '/about_call_police',
+          builder: (context, state) => const AboutCallPoliceScreen(),
       ),
       GoRoute(
         path: '/work_in_progress',

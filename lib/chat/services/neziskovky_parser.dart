@@ -236,14 +236,17 @@ Future<ChatResponse> getChatHistory({Cookie? cookie}) async {
             if (node.attributes.containsValue('jdk-calendar ')) {
               name = historyOuterTag?.nodes[counter + 1].text?.trim() ?? '?';
               _log.finest(
-                  'CALENDAR! $node ${historyOuterTag?.nodes[counter + 1].text
-                      ?.trim()}');
+                  'CALENDAR! $node ${historyOuterTag?.nodes[counter + 1].text?.trim()}');
             }
           } else {
-            if (node.attributes.containsValue('label label-badge label-danger')) {
+            if (node.attributes
+                .containsValue('label label-badge label-danger')) {
               _log.finest('STATUS! $node ${node.nodes.first.text}');
 
-              result.data.add(ChatRoom(roomUri: roomUri, name: name, status: node.nodes.first.text ?? ''));
+              result.data.add(ChatRoom(
+                  roomUri: roomUri,
+                  name: name,
+                  status: node.nodes.first.text ?? ''));
 
               roomUri = '';
               name = '';
@@ -315,6 +318,37 @@ Future<String> getChatTimestamp({
   );
   if (response.statusCode == 200) {
     result = response.body;
+  }
+
+  return result;
+}
+
+Future<ChatResponse> checkAuthorized({
+  Cookie? cookie,
+}) async {
+  ChatResponse result;
+
+  _log.finest('checkAuthorized: Cookie = $cookie');
+  // Open new chat, or connect to already existing
+  http.Response response = await _queryServer(
+    method: _HttpMethod.get,
+    query: 'templ=p_chat_zpravy',
+    cookie: cookie,
+  );
+  result = ChatResponse(
+      statusCode: response.statusCode,
+      cookie: response.headers.containsKey('set-cookie')
+          ? Cookie.fromSetCookieValue(response.headers['set-cookie']!)
+          : null);
+  if (result.statusCode == HttpStatus.ok) {
+    Document document = parse(response.body);
+
+    List<Element> element = document.getElementsByClassName('alert');
+    if (element.length == 1 && !element.first.text.contains('Chyba')) {
+      _log.finest('User already logged in - ${result.cookie}');
+    } else {
+      result.statusCode = HttpStatus.unauthorized;
+    }
   }
 
   return result;

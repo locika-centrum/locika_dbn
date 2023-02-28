@@ -20,6 +20,8 @@ import 'chat/screens/chat_login_screen.dart';
 import 'chat/screens/chat_sign_up_screen.dart';
 import 'chat/models/chat_response.dart';
 import 'chat/screens/about_call_police_screen.dart';
+import 'chat/screens/how_chat_works.dart';
+import 'chat/screens/chat_rules_screen.dart';
 import 'chat/services/neziskovky_parser.dart';
 
 import 'utils/app_theme.dart';
@@ -222,7 +224,8 @@ class MyApp extends StatelessWidget {
       GoRoute(
           path: '/chat',
           builder: (context, state) {
-            Cookie cookie = (state.extra ?? context.read<SessionData>().cookie) as Cookie;
+            Cookie cookie =
+                (state.extra ?? context.read<SessionData>().cookie) as Cookie;
             return ChatScreen(
               cookie: cookie,
             );
@@ -233,7 +236,15 @@ class MyApp extends StatelessWidget {
       ),
       GoRoute(
         path: '/about_call_police',
-          builder: (context, state) => const AboutCallPoliceScreen(),
+        builder: (context, state) => const AboutCallPoliceScreen(),
+      ),
+      GoRoute(
+        path: '/how_chat_works',
+        builder: (context, state) => const HowChatWorks(),
+      ),
+      GoRoute(
+        path: '/chat_rules',
+        builder: (context, state) => const ChatRulesScreen(),
       ),
       GoRoute(
         path: '/work_in_progress',

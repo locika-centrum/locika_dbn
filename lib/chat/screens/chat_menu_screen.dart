@@ -30,7 +30,7 @@ class ChatMenuScreen extends StatelessWidget {
                   'Žádný problém není tak malý nebo tak velký, aby se nedal řešit. Jsme tady pro tebe.',
               backgroundColor: const Color(0xff0567ad).withOpacity(0.15),
               hintText: 'Jak chat funguje',
-              hintRoute: '/work_in_progress',
+              hintRoute: '/how_chat_works',
               actionButton: OutlinedButton(
                 onPressed: () => context.go('/login'),
                 style: OutlinedButton.styleFrom(

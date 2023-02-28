@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:go_router/go_router.dart';
 
-import '../../widgets/info_page_scaffold.dart';
+import '../../widgets/scrolling_scaffold.dart';
 
 class ChatIntroScreen extends StatelessWidget {
   const ChatIntroScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return InfoPageScaffold(
-      route: '/',
+    return ScrollingScaffold(
+      closeRoute: '/',
       body: FutureBuilder(
         future: rootBundle.loadString('assets/texts/about_chat.md'),
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
@@ -30,21 +29,8 @@ class ChatIntroScreen extends StatelessWidget {
           );
         },
       ),
-      bottomButton: OutlinedButton(
-        onPressed: () => context.go('/chat_menu'),
-        style: OutlinedButton.styleFrom(
-          backgroundColor: Colors.black,
-          foregroundColor: Colors.white,
-          minimumSize: const Size.fromHeight(48.0),
-          shape: const StadiumBorder(),
-        ),
-        child: Text(
-          'Pokračovat',
-          style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                color: Colors.white,
-              ),
-        ),
-      ),
+      actionRoute: '/chat_menu',
+      actionString: 'Pokračovat',
     );
   }
 }

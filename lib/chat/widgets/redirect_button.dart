@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+
+import '../models/session_data.dart';
 
 class RedirectButton extends StatelessWidget {
   final String label;
@@ -18,7 +21,10 @@ class RedirectButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
-      onPressed: () => context.go(route),
+      onPressed: () => context.go(
+        route,
+        extra: context.read<SessionData>().cookie,
+      ),
       style: OutlinedButton.styleFrom(
         foregroundColor: buttonColor,
         backgroundColor: backgroundColor,

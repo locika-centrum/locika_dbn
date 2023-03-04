@@ -22,6 +22,7 @@ import 'chat/models/chat_response.dart';
 import 'chat/screens/about_call_police_screen.dart';
 import 'chat/screens/how_chat_works.dart';
 import 'chat/screens/chat_rules_screen.dart';
+import 'chat/screens/most_interesting_facts_screen.dart';
 import 'chat/services/neziskovky_parser.dart';
 
 import 'utils/app_theme.dart';
@@ -209,7 +210,7 @@ class MyApp extends StatelessWidget {
 
             if (response.statusCode == HttpStatus.ok) {
               _log.fine('Cookie is valid, skipping login');
-              return '/chat';
+              return '/about_chat';
             }
           },
           builder: (context, state) {
@@ -245,6 +246,10 @@ class MyApp extends StatelessWidget {
       GoRoute(
         path: '/chat_rules',
         builder: (context, state) => const ChatRulesScreen(),
+      ),
+      GoRoute(
+        path: '/most_interesting_facts',
+        builder: (context, state) => const MostInterestingFactsScreen(),
       ),
       GoRoute(
         path: '/work_in_progress',

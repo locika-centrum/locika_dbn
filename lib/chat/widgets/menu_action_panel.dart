@@ -1,21 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'hint_item.dart';
+
+class ActionHintData {
+  final String hintText;
+  final String hintRoute;
+
+  ActionHintData({
+    required this.hintText,
+    required this.hintRoute,
+  });
+}
+
 class MenuActionPanel extends StatelessWidget {
   final String title;
-  final String text;
+  final String? text;
   final Widget? actionButton;
   final String? hintText;
   final String? hintRoute;
   final Color backgroundColor;
 
+  final List<ActionHintData> hints;
+
   const MenuActionPanel({
     required this.title,
-    required this.text,
+    this.text,
     this.backgroundColor = const Color(0xffe9e9eb),
     this.actionButton,
     this.hintText,
     this.hintRoute,
+    this.hints = const [],
     Key? key,
   }) : super(key: key);
 
@@ -24,7 +39,7 @@ class MenuActionPanel extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(
         vertical: 8.0,
-        horizontal: 8.0,
+        horizontal: 16.0,
       ),
       child: Container(
         padding: const EdgeInsets.symmetric(
@@ -43,10 +58,19 @@ class MenuActionPanel extends StatelessWidget {
                 style: Theme.of(context).textTheme.displaySmall?.copyWith(
                       fontWeight: FontWeight.bold,
                     )),
-            Text(
-              '\n$text',
-              style: Theme.of(context).textTheme.displaySmall,
-            ),
+            if (text != null)
+              Text(
+                '\n$text',
+                style: Theme.of(context).textTheme.displaySmall,
+              ),
+            if (hints.isNotEmpty)
+              ...List<Widget>.generate(
+                hints.length,
+                (index) => HintItem(
+                  hintText: hints[index].hintText,
+                  hintRoute: hints[index].hintRoute,
+                ),
+              ),
             if (hintText != null && hintRoute != null)
               Padding(
                 padding: const EdgeInsets.only(top: 16.0),

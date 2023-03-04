@@ -76,12 +76,14 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   void dispose() {
+    /*
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight
     ]);
+     */
 
     super.dispose();
   }

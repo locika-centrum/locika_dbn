@@ -152,7 +152,7 @@ class _ChatLoginScreenState extends State<ChatLoginScreen> {
           _log.finest('Storing cookie: ${result.cookie}');
 
           context.go(
-            '/chat',
+            '/about_chat',
             extra: result.cookie,
           );
           break;

@@ -37,7 +37,7 @@ class ChatRulesScreen extends StatelessWidget {
                         padding: EdgeInsets.symmetric(horizontal: 16.0),
                         child: RedirectButton(
                           label: 'Chci chatovat',
-                          route: '/login',
+                          route: '/chat',
                           backgroundColor: Color(0xff0567ad),
                         ),
                       ),

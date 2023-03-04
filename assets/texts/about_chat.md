@@ -1,14 +1,4 @@
-# O Chatu
-\
-Necítíš se doma bezpečně?
-\
-\
-Máš strach o sebe nebo své blízké?
-\
-\
-Ubližují si tvoji blízcí navzájem nebo přímo ubližují tobě?
-
-![dnb](resource:assets/images/kluk_pod_posteli.png#1000x150)
+![dnb](resource:assets/images/boy_under_a_bed.png#1000x150)
 
 **Neboj se, nejsi v tom sám/a.**
 \

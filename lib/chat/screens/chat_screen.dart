@@ -51,6 +51,7 @@ class _ChatScreenState extends State<ChatScreen>
   DateTime? chatStart;
 
   String timestamp = '';
+  bool online = false;
 
   ChatResponse<ChatMessage>? chatHistory;
   final ScrollController scrollController = ScrollController();
@@ -77,7 +78,7 @@ class _ChatScreenState extends State<ChatScreen>
           );
 
           if (chatStart == null) setState(() => chatStart = DateTime.now());
-          if (result.data.isNotEmpty) {
+          if (result.statusCode == HttpStatus.ok && result.data.isNotEmpty) {
             ChatRoom selectedRoom =
                 result.data[random.nextInt(result.data.length)];
 
@@ -105,31 +106,38 @@ class _ChatScreenState extends State<ChatScreen>
             chatID: room!.chatID!,
             cookie: widget.cookie,
           );
-          _log.fine(
-              'Tick MESSAGE: ${elapsed.inSeconds} : ${timestamp != newTimestamp ? 'UPDATE' : 'KEEP'} : for $room');
-
-          if (timestamp != newTimestamp) {
-            timestamp = newTimestamp;
-
-            if (context.mounted) {
-              chatHistory = await getChatMessages(
-                  advisorID: room!.advisorID!,
-                  chatID: room!.chatID!,
-                  cookie: widget.cookie,
-                  nickName: context.read<SettingsData>().nickName);
-              _log.fine('Chat refreshed');
-
-              setState(() {});
-
-              Future.delayed(
-                const Duration(milliseconds: 200),
-                () {
-                  scrollController
-                      .jumpTo(scrollController.position.maxScrollExtent);
-                },
-              );
+          _log.finest(
+              '*** New stamp: $newTimestamp, empty: ${newTimestamp != ''}');
+          if (newTimestamp != '') {
+            if (!online) {
+              setState(() => online = true);
             }
+
+            if (timestamp != newTimestamp) {
+              timestamp = newTimestamp;
+
+              if (context.mounted) {
+                chatHistory = await getChatMessages(
+                    advisorID: room!.advisorID!,
+                    chatID: room!.chatID!,
+                    cookie: widget.cookie,
+                    nickName: context.read<SettingsData>().nickName);
+                _log.fine('Chat refreshed');
+                setState(() => {});
+
+                Future.delayed(
+                  const Duration(milliseconds: 200),
+                  () {
+                    scrollController
+                        .jumpTo(scrollController.position.maxScrollExtent);
+                  },
+                );
+              }
+            }
+          } else {
+            setState(() => online = false);
           }
+          _log.fine('Tick MESSAGE: {elapsed: ${elapsed.inSeconds}, online: $online, chatStart: $chatStart, room: $room}');
         }
       }
     });
@@ -156,122 +164,140 @@ class _ChatScreenState extends State<ChatScreen>
           route: '/',
           showAboutLink: true,
         ),
-        body: Column(
+        backgroundColor: const Color(0xffd9e8f3),
+        body: Stack(
           children: [
-            Container(
-              color: const Color(0xfffebd49),
-              child: InkWell(
-                onTap: () => context.go('/work_in_progress'),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.call,
-                      ),
-                      Text(
-                        '  SOS Pomoc',
-                        style: Theme.of(context).textTheme.displaySmall,
-                      ),
-                      const Spacer(),
-                      const Icon(
-                        Icons.chevron_right,
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            if (chatStart == null) const CircularProgressIndicator(),
-            if (chatStart != null && room == null)
-              Expanded(child: AdvisorNotAvailable(date: chatStart!)),
-            if (chatStart != null && room != null)
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SingleChildScrollView(
-                    controller: scrollController,
-                    physics: const ScrollPhysics(),
-                    child: Column(
-                      children: [
-                        DateChip(
-                          date: chatHistory == null
-                              ? chatStart!
-                              : chatHistory!.data.first.dateTime,
-                          includeTime: true,
-                        ),
-                        Center(
-                          child: Text(
-                            'Chat byl v pořádku otevřen,',
-                            style:
-                                Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                      color: Colors.grey,
-                                    ),
-                          ),
-                        ),
-                        Center(
-                          child: Text(
-                            'vyčkejte než se připojí Pracovník chatu.',
-                            style:
-                                Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                      color: Colors.grey,
-                                    ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        if (chatHistory != null)
-                          ChatHistory(data: chatHistory!.data),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            if (chatStart != null && room != null)
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: MessageBar(
-                  onSend: (String message) => postMessage(
-                    text: message,
-                    chatID: room!.chatID!,
-                    cookie: widget.cookie,
-                  ),
-                ),
-              ),
-            if (chatStart != null)
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: OutlinedButton(
-                      onPressed: () => context.go('/'),
-                      style: OutlinedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        foregroundColor: Colors.white,
-                        minimumSize: const Size.fromHeight(48.0),
-                        shape: const StadiumBorder(),
-                      ),
+            Positioned.fill(
+                child: Image.asset(
+              'assets/images/chat_background.png',
+              fit: BoxFit.fitWidth,
+              alignment: Alignment.bottomCenter,
+            )),
+            Column(
+              children: [
+                Container(
+                  color: const Color(0xfffebd49),
+                  child: InkWell(
+                    onTap: () => context.go('/work_in_progress'),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.exit_to_app),
-                          Text(
-                            '  Zpět do hry',
-                            style: Theme.of(context)
-                                .textTheme
-                                .displaySmall
-                                ?.copyWith(
-                                  color: Colors.white,
-                                ),
+                          const Icon(
+                            Icons.call,
                           ),
+                          Text(
+                            '  SOS Pomoc',
+                            style: Theme.of(context).textTheme.displaySmall,
+                          ),
+                          const Spacer(),
+                          const Icon(
+                            Icons.chevron_right,
+                          )
                         ],
                       ),
                     ),
                   ),
                 ),
-              ),
+                if (chatStart == null) const CircularProgressIndicator(),
+                if (chatStart != null && room == null)
+                  Expanded(
+                    child: AdvisorNotAvailable(date: chatStart!),
+                  ),
+                if (chatStart != null && room != null)
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SingleChildScrollView(
+                        controller: scrollController,
+                        physics: const ScrollPhysics(),
+                        child: Column(
+                          children: [
+                            DateChip(
+                              date: chatHistory == null
+                                  ? chatStart!
+                                  : chatHistory!.data.first.dateTime,
+                              includeTime: true,
+                            ),
+                            Center(
+                              child: Text(
+                                'Chat byl v pořádku otevřen,',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                      color: Colors.grey,
+                                    ),
+                              ),
+                            ),
+                            Center(
+                              child: Text(
+                                'vyčkejte než se připojí Pracovník chatu.',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                      color: Colors.grey,
+                                    ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            if (chatHistory != null)
+                              ChatHistory(data: chatHistory!.data),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                if (online && chatStart != null && room != null)
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: MessageBar(
+                      onSend: (String message) => postMessage(
+                        text: message,
+                        chatID: room!.chatID!,
+                        cookie: widget.cookie,
+                      ),
+                      messageBarColor: Colors.transparent,
+                    ),
+                  ),
+                if (chatStart != null)
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: SafeArea(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: OutlinedButton(
+                          onPressed: () => context.go('/'),
+                          style: OutlinedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            foregroundColor: Colors.white,
+                            minimumSize: const Size.fromHeight(48.0),
+                            shape: const StadiumBorder(),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.exit_to_app),
+                              Text(
+                                '  Zpět do hry',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .displaySmall
+                                    ?.copyWith(
+                                      color: Colors.white,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           ],
         ),
       ),

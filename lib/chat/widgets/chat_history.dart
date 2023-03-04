@@ -25,17 +25,20 @@ class ChatHistory extends StatelessWidget {
         bool isSender =
             data[index].sysMessage == context.read<SettingsData>().nickName;
 
-        return BubbleSpecialThree(
-          isSender: isSender,
-          text: data[index].message,
-          tail: true,
-          color: isSender ? const Color(0xff448af7) : const Color(0xffe9e9eb),
-          textStyle: isSender
-              ? Theme.of(context)
-                  .textTheme
-                  .bodyMedium!
-                  .copyWith(color: Colors.white)
-              : Theme.of(context).textTheme.bodyMedium!,
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
+          child: BubbleSpecialThree(
+            isSender: isSender,
+            text: data[index].message,
+            tail: true,
+            color: isSender ? const Color(0xff0567ad) : Colors.white,
+            textStyle: isSender
+                ? Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(color: Colors.white)
+                : Theme.of(context).textTheme.bodyMedium!,
+          ),
         );
       },
     );

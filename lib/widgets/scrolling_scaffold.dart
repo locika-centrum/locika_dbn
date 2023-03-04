@@ -5,24 +5,32 @@ import '../utils/app_theme.dart';
 import './app_bar_chat.dart';
 import '../chat/widgets/redirect_button.dart';
 
+class ActionButtonData {
+  String actionString;
+  String actionRoute;
+  Color actionColor;
+  Color actionBackgroundColor;
+
+  ActionButtonData({
+    required this.actionString,
+    this.actionRoute = '/',
+    this.actionColor = Colors.white,
+    this.actionBackgroundColor = Colors.black,
+  });
+}
+
 class ScrollingScaffold extends StatefulWidget {
   final String? title;
   final String? closeRoute;
   final Widget? body;
 
-  final String? actionRoute;
-  final String actionString;
-  final Color actionColor;
-  final Color actionBackgroundColor;
+  final List<ActionButtonData> actionButtonData;
 
   const ScrollingScaffold({
     this.title,
     this.body,
     this.closeRoute,
-    this.actionRoute,
-    this.actionString = '',
-    this.actionColor = Colors.white,
-    this.actionBackgroundColor = Colors.black,
+    this.actionButtonData = const [],
     Key? key,
   }) : super(key: key);
 
@@ -41,22 +49,51 @@ class _ScrollingScaffoldState extends State<ScrollingScaffold> {
         appBar: ChatAppBar(
           route: widget.closeRoute ?? '',
         ),
-        body: widget.body,
-        persistentFooterButtons: widget.actionRoute == null
-            ? null
-            : [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0,
-                  ),
-                  child: RedirectButton(
-                    label: widget.actionString ?? '',
-                    route: widget.actionRoute!,
-                    buttonColor: widget.actionColor,
-                    backgroundColor: widget.actionBackgroundColor,
-                  ),
-                )
-              ],
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (widget.title != null)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Text(
+                          widget.title ?? '',
+                          style: Theme.of(context).textTheme.displayLarge,
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                    widget.body ?? Container(),
+                  ],
+                ),
+              ),
+            ),
+            if (widget.actionButtonData.isNotEmpty)
+              ...List<Widget>.generate(
+                  widget.actionButtonData.length,
+                  (int index) => Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0,
+                          vertical: 4.0,
+                        ),
+                        child: RedirectButton(
+                          label: widget.actionButtonData[index].actionString,
+                          route: widget.actionButtonData[index].actionRoute,
+                          buttonColor:
+                              widget.actionButtonData[index].actionColor,
+                          backgroundColor: widget
+                              .actionButtonData[index].actionBackgroundColor,
+                        ),
+                      ),
+                  growable: false),
+            SafeArea(
+              child: Container(),
+            ),
+          ],
+        ),
       ),
     );
   }

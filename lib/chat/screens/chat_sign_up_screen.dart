@@ -161,7 +161,7 @@ class _ChatSignUpScreenState extends State<ChatSignUpScreen> {
             _log.finest('Storing cookie: ${result.cookie} for ${_nickNameController.text} / ${context.read<SettingsData>().nickName}');
 
             context.go(
-              '/chat',
+              '/about_chat',
               extra: result.cookie,
             );
           }

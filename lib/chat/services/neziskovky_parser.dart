@@ -49,7 +49,7 @@ Future<ChatResponse<ChatRoom>> getChatRooms({Cookie? cookie}) async {
       cookie: response.headers.containsKey('set-cookie')
           ? Cookie.fromSetCookieValue(response.headers['set-cookie']!)
           : null);
-  if (result.statusCode == 200) {
+  if (result.statusCode == HttpStatus.ok) {
     Document document = parse(response.body);
     List<Element> elements = document.getElementsByClassName('text-center');
 

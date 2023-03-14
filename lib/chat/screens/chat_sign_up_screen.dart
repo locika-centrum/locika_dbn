@@ -99,13 +99,13 @@ class _ChatSignUpScreenState extends State<ChatSignUpScreen> {
                 child: OutlinedButton(
                   onPressed: () async => signUp(),
                   style: OutlinedButton.styleFrom(
-                    backgroundColor: Colors.black,
+                    backgroundColor: const Color(0xff0567ad),
                     foregroundColor: Colors.white,
                     minimumSize: const Size.fromHeight(48.0),
                     shape: const StadiumBorder(),
                   ),
                   child: Text(
-                    'Přihlásit se',
+                    'Registrovat se',
                     style: Theme.of(context).textTheme.displaySmall?.copyWith(
                           color: Colors.white,
                         ),
@@ -126,7 +126,7 @@ class _ChatSignUpScreenState extends State<ChatSignUpScreen> {
                     child: Text(
                       'Už mám účet',
                       style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                            color: Colors.black,
+                            color: const Color(0xff0567ad),
                           ),
                     ),
                   ),

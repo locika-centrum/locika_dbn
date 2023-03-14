@@ -66,17 +66,29 @@ class SettingsData extends ChangeNotifier with HiveObjectMixin {
     save();
   }
 
+  @HiveField(5, defaultValue: true)
+  bool _firstLogin;
+  bool get firstLogin => _firstLogin;
+  set firstLogin(bool value) {
+    _firstLogin = value;
+    notifyListeners();
+
+    save();
+  }
+
   SettingsData({
     int gameSize = 0,
     bool slidingPictures = false,
     bool tictactoeStartsHuman = true,
     bool reversiStartsHuman = true,
     String nickName = '',
+    bool firstLogin = true,
   })  : _gameSize = gameSize,
         _slidingPictures = slidingPictures,
         _tictactoeStartsHuman = tictactoeStartsHuman,
         _reversiStartsHuman = reversiStartsHuman,
-        _nickName = nickName;
+        _nickName = nickName,
+        _firstLogin = firstLogin;
 
   @override
   String toString() {

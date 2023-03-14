@@ -87,6 +87,18 @@ class SettingsScreen extends StatelessWidget {
                   context.read<SettingsData>().reversiStartsHuman = value;
                 },
               ),
+              SettingsTile(
+                leading: const Icon(Icons.redo),
+                title: const Text('Vynulovat score'),
+                onPressed: (context) {
+                  // TODO tictactoe
+
+                  // TODO puzzle
+
+                  // TODO reversi
+
+                },
+              ),
             ],
           ),
           SettingsSection(
@@ -111,71 +123,14 @@ class SettingsScreen extends StatelessWidget {
                   );
                 },
               ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/*
-class _SettingsScreenState extends State<SettingsScreen> {
-  SettingsData? _data;
-
-  @override
-  void initState() {
-    super.initState();
-
-    loadData();
-  }
-
-  Future<void> loadData() async {
-    final box = await Hive.openBox<SettingsData>(SettingsData.hiveBoxName);
-    _data = box.get(SettingsData.settingsKey);
-
-    if (_data == null) {
-      box.put(SettingsData.settingsKey, SettingsData());
-    }
-    _log.finest('Data: $_data');
-
-    setState(() {});
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: widget.backgroundColor,
-      body: SettingsList(
-        sections: [
-          SettingsSection(
-            title: const Text('Obecné'),
-            tiles: [
-              SettingsTile.navigation(
-                leading: const Icon(Icons.view_comfy),
-                title: const Text('Velikost hry'),
-                value: _data == null
-                    ? const Text('')
-                    : Text(_data!.gameSizes[_data!.gameSize]),
-                onPressed: (context) {
-                  GoRouter.of(context).push(
-                    '/settings_picker',
-                    extra: SettingsPickerData(
-                        title: 'Velikost hry',
-                        options: _data!.gameSizes,
-                        selectedOption: _data!.gameSize,
-                        onChange: (index) {
-                          setState(() {
-                            _data!.gameSize = index;
-                          });
-                        }),
-                  );
-                },
-              ),
               SettingsTile.switchTile(
-                initialValue: false,
-                onToggle: (value) {},
-                title: const Text('xxx'),
+                initialValue: context
+                    .select<SettingsData, bool>((value) => value.firstLogin),
+                leading: const Icon(Icons.verified_user),
+                title: const Text('První přihlášení'),
+                onToggle: (value) {
+                  context.read<SettingsData>().firstLogin = value;
+                },
               )
             ],
           ),
@@ -184,4 +139,3 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 }
-*/

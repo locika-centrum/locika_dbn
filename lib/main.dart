@@ -7,12 +7,10 @@ import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
 
 import 'screens/main_screen.dart';
-import 'chat/screens/chat_splash_screen.dart';
 import 'chat/screens/chat_intro_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/settings_picker_screen.dart';
 import 'screens/settings_text_screen.dart';
-import 'chat/screens/chat_menu_screen.dart';
 import 'screens/work_in_progress_screen.dart';
 import 'chat/screens/chat_screen.dart';
 import 'chat/screens/about_chat_screen.dart';
@@ -161,46 +159,8 @@ class MyApp extends StatelessWidget {
         },
       ),
       GoRoute(
-        path: '/chat_splash',
-        //builder: (context, state) => const ChatSplashScreen(),
-        pageBuilder: (context, state) {
-          // return const ChatSplashScreen();
-          return CustomTransitionPage(
-            key: state.pageKey,
-            child: const ChatSplashScreen(),
-            transitionDuration: const Duration(milliseconds: 1500),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-              return FadeTransition(
-                opacity:
-                    CurveTween(curve: Curves.easeInOutCirc).animate(animation),
-                child: child,
-              );
-            },
-          );
-        },
-      ),
-      GoRoute(
         path: '/chat_intro',
-        pageBuilder: (context, state) {
-          return CustomTransitionPage(
-            key: state.pageKey,
-            child: const ChatIntroScreen(),
-            transitionDuration: const Duration(milliseconds: 1500),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-              return FadeTransition(
-                opacity:
-                    CurveTween(curve: Curves.easeInOutCirc).animate(animation),
-                child: child,
-              );
-            },
-          );
-        },
-      ),
-      GoRoute(
-        path: '/chat_menu',
-        builder: (context, state) => const ChatMenuScreen(),
+        builder: (context, state) => const ChatIntroScreen(),
       ),
       GoRoute(
           path: '/login',
@@ -210,8 +170,9 @@ class MyApp extends StatelessWidget {
 
             if (response.statusCode == HttpStatus.ok) {
               _log.fine('Cookie is valid, skipping login');
-              return '/about_chat';
+              return '/chat';
             }
+            return null;
           },
           builder: (context, state) {
             return ChatLoginScreen(
@@ -227,6 +188,9 @@ class MyApp extends StatelessWidget {
           builder: (context, state) {
             Cookie cookie =
                 (state.extra ?? context.read<SessionData>().cookie) as Cookie;
+            _log.finest('First login: ${context.read<SettingsData>().firstLogin}');
+            // context.read<SettingsData>().firstLogin = false;
+
             return ChatScreen(
               cookie: cookie,
             );

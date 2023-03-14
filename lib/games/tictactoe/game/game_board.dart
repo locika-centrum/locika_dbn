@@ -5,8 +5,8 @@ import 'package:logging/logging.dart';
 
 Logger _log = Logger('game_board.dart');
 
-const infinity = 999999;
-const winValue = 200000;
+const infinity = 9999999;
+const winValue = 5000000;
 const scoreValues = [
   [0, 1, 1751, winValue], // three in row
   [0, 1, 511, 5000, winValue], // four in row

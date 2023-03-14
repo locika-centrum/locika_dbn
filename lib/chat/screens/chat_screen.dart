@@ -66,6 +66,10 @@ class _ChatScreenState extends State<ChatScreen>
       }
 
       if (room == null) {
+        if (lastElapsed == Duration.zero) {
+          context.read<SettingsData>().firstLogin = false;
+        }
+
         // Retrieve room
         if (lastElapsed == Duration.zero ||
             elapsed.inSeconds - lastElapsed.inSeconds >=

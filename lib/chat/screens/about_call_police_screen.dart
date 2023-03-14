@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../widgets/info_page_scaffold.dart';
 import '../../widgets/scrolling_scaffold.dart';
 import '../widgets/redirect_button.dart';
 

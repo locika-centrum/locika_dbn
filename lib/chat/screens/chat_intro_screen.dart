@@ -61,15 +61,10 @@ class ChatIntroScreen extends StatelessWidget {
       ),
       actionButtonData: [
         ActionButtonData(
-          actionString: 'Přihlásit se',
-          actionRoute: '/login',
-        ),
-        ActionButtonData(
-          actionString: 'Ještě nemám účet',
+          actionString: 'Pokračovat',
           actionRoute: '/sign_up',
-          actionColor: Colors.black,
-          actionBackgroundColor: Colors.white,
-        )
+          actionBackgroundColor: const Color(0xff0567ad),
+        ),
       ],
     );
   }

@@ -17,6 +17,7 @@ class AboutChatScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScrollingScaffold(
       title: 'O Chatu',
+      closeRoute: '/chat',
       body: FutureBuilder(
         future: rootBundle.loadString('assets/texts/about_chat2.md'),
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {

@@ -42,8 +42,8 @@ class _HowChatWorksState extends State<HowChatWorks> {
   @override
   Widget build(BuildContext context) {
     return ScrollingScaffold(
-      closeRoute: '/',
       title: 'Jak chat funguje',
+      closeRoute: '/about_chat',
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

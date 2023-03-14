@@ -41,7 +41,6 @@ class _ChatLoginScreenState extends State<ChatLoginScreen> {
     return Scaffold(
       appBar: const ChatAppBar(
         route: '/',
-        showAboutLink: true,
       ),
       body: Padding(
         padding: const EdgeInsets.only(left: 24, right: 24),
@@ -96,7 +95,7 @@ class _ChatLoginScreenState extends State<ChatLoginScreen> {
               child: OutlinedButton(
                 onPressed: () async => login(),
                 style: OutlinedButton.styleFrom(
-                  backgroundColor: Colors.black,
+                  backgroundColor: const Color(0xff0567ad),
                   foregroundColor: Colors.white,
                   minimumSize: const Size.fromHeight(48.0),
                   shape: const StadiumBorder(),
@@ -123,7 +122,7 @@ class _ChatLoginScreenState extends State<ChatLoginScreen> {
                   child: Text(
                     'Ještě nemám účet',
                     style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                      color: Colors.black,
+                      color: const Color(0xff0567ad),
                     ),
                   ),
                 ),

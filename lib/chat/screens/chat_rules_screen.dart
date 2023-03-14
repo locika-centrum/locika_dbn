@@ -11,7 +11,7 @@ class ChatRulesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScrollingScaffold(
-      closeRoute: '/',
+      closeRoute: '/how_chat_works',
       body: FutureBuilder(
         future: rootBundle.loadString('assets/texts/chat_rules.md'),
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {

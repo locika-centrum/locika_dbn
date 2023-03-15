@@ -7,6 +7,10 @@ import 'package:logging/logging.dart';
 
 import '../settings/model/settings_data.dart';
 
+import '../games/tictactoe/model/tictactoe_game_score.dart';
+import '../games/sliding/model/sliding_game_score.dart';
+import '../games/reversi/model/reversi_game_score.dart';
+
 Logger _log = Logger('settings_screen.dart');
 
 class SettingsScreen extends StatelessWidget {
@@ -32,13 +36,13 @@ class SettingsScreen extends StatelessWidget {
                 leading: const Icon(Icons.view_comfy),
                 title: const Text('Velikost hry'),
                 value: Text(context.select<SettingsData, String>(
-                    (value) => value.gameSizes[value.gameSize])),
+                    (value) => SettingsData.gameSizes[value.gameSize])),
                 onPressed: (context) {
                   GoRouter.of(context).push(
                     '/settings_picker',
                     extra: SettingsPickerData(
                       title: 'Velikost hry',
-                      options: context.read<SettingsData>().gameSizes,
+                      options: SettingsData.gameSizes,
                       selectedOption: context.read<SettingsData>().gameSize,
                       onChange: (index) {
                         context.read<SettingsData>().gameSize = index;
@@ -90,13 +94,18 @@ class SettingsScreen extends StatelessWidget {
               SettingsTile(
                 leading: const Icon(Icons.redo),
                 title: const Text('Vynulovat score'),
-                onPressed: (context) {
-                  // TODO tictactoe
+                onPressed: (context) async {
+                  // tictactoe
+                  Box box = await Hive.openBox(TicTacToeGameScore.hiveBoxName);
+                  box.clear();
 
-                  // TODO puzzle
+                  // slider
+                  box = await Hive.openBox(SlidingGameScore.hiveBoxName);
+                  box.clear();
 
-                  // TODO reversi
-
+                  // reversi
+                  box = await Hive.openBox(ReversiGameScore.hiveBoxName);
+                  box.clear();
                 },
               ),
             ],

@@ -21,6 +21,8 @@ import 'chat/screens/about_call_police_screen.dart';
 import 'chat/screens/how_chat_works.dart';
 import 'chat/screens/chat_rules_screen.dart';
 import 'chat/screens/most_interesting_facts_screen.dart';
+import 'chat/screens/email_screen.dart';
+
 import 'chat/services/neziskovky_parser.dart';
 
 import 'utils/app_theme.dart';
@@ -188,7 +190,8 @@ class MyApp extends StatelessWidget {
           builder: (context, state) {
             Cookie cookie =
                 (state.extra ?? context.read<SessionData>().cookie) as Cookie;
-            _log.finest('First login: ${context.read<SettingsData>().firstLogin}');
+            _log.finest(
+                'First login: ${context.read<SettingsData>().firstLogin}');
             // context.read<SettingsData>().firstLogin = false;
 
             return ChatScreen(
@@ -214,6 +217,10 @@ class MyApp extends StatelessWidget {
       GoRoute(
         path: '/most_interesting_facts',
         builder: (context, state) => const MostInterestingFactsScreen(),
+      ),
+      GoRoute(
+        path: '/email',
+        builder: (context, state) => const EmailScreen(),
       ),
       GoRoute(
         path: '/work_in_progress',

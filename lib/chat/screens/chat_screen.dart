@@ -21,7 +21,7 @@ import '../models/chat_response.dart';
 import '../models/chat_room.dart';
 import '../services/neziskovky_parser.dart';
 import '../models/chat_message.dart';
-import '../models/session_data.dart';
+import '../widgets/redirect_button.dart';
 
 Logger _log = Logger('chat_screen.dart');
 
@@ -141,7 +141,8 @@ class _ChatScreenState extends State<ChatScreen>
           } else {
             setState(() => online = false);
           }
-          _log.fine('Tick MESSAGE: {elapsed: ${elapsed.inSeconds}, online: $online, chatStart: $chatStart, room: $room}');
+          _log.fine(
+              'Tick MESSAGE: {elapsed: ${elapsed.inSeconds}, online: $online, chatStart: $chatStart, room: $room}');
         }
       }
     });
@@ -271,32 +272,26 @@ class _ChatScreenState extends State<ChatScreen>
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: SafeArea(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: OutlinedButton(
-                          onPressed: () => context.go('/'),
-                          style: OutlinedButton.styleFrom(
-                            backgroundColor: Colors.black,
-                            foregroundColor: Colors.white,
-                            minimumSize: const Size.fromHeight(48.0),
-                            shape: const StadiumBorder(),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.exit_to_app),
-                              Text(
-                                '  Zpět do hry',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .displaySmall
-                                    ?.copyWith(
-                                      color: Colors.white,
-                                    ),
+                      child: Column(
+                        children: [
+                          if (room == null)
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                              child: RedirectButton(
+                                label: 'Napsat e-mail',
+                                route: '/email',
+                                backgroundColor: Color(0xff0567ad),
                               ),
-                            ],
+                            ),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                            child: RedirectButton(
+                              label: '  Zpět do hry',
+                              route: '/',
+                              labelIcon: Icons.exit_to_app,
+                            ),
                           ),
-                        ),
+                        ],
                       ),
                     ),
                   ),

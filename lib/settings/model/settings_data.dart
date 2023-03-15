@@ -7,8 +7,8 @@ part 'settings_data.g.dart';
 class SettingsData extends ChangeNotifier with HiveObjectMixin {
   static const String hiveBoxName = 'settings-box';
   static const String settingsKey = 'settings';
+  static const gameSizes = ['malá', 'střední', 'velká', 'největší'];
 
-  final gameSizes = ['malá', 'střední', 'velká', 'největší'];
   bool _isReady = false;
   bool get isReady => _isReady;
   set isReady(bool ready) {

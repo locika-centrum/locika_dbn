@@ -9,9 +9,11 @@ class RedirectButton extends StatelessWidget {
   final String route;
   final Color buttonColor;
   final Color backgroundColor;
+  final IconData? labelIcon;
 
   const RedirectButton({
     required this.label,
+    this.labelIcon,
     this.route = '/',
     this.buttonColor = Colors.white,
     this.backgroundColor = Colors.black,
@@ -31,11 +33,18 @@ class RedirectButton extends StatelessWidget {
         minimumSize: const Size.fromHeight(48.0),
         shape: const StadiumBorder(),
       ),
-      child: Text(
-        label,
-        style: Theme.of(context).textTheme.displaySmall?.copyWith(
-              color: buttonColor,
-            ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (labelIcon != null)
+            Icon(labelIcon),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                  color: buttonColor,
+                ),
+          ),
+        ],
       ),
     );
   }

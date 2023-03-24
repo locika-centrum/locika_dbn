@@ -27,6 +27,8 @@ class AppBarMain extends StatelessWidget {
           ),
           onLongPressStart: (_) {
             timer = Timer(const Duration(milliseconds: 500), () {
+              // HapticFeedback.vibrate();
+              HapticFeedback.heavyImpact();
               HapticFeedback.heavyImpact();
               if (context.read<SettingsData>().firstLogin) {
                 context.go('/chat_intro');

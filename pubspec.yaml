@@ -3,7 +3,7 @@ description: Chat application for Centrum LOCIKA.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.0+11
+version: 1.0.0+12
 
 environment:
   sdk: '>=2.18.2 <3.0.0'
@@ -34,7 +34,8 @@ dependencies:
   chat_bubbles: ^1.4.1
   intl: ^0.18.0
   video_player: ^2.5.3
-  youtube_player_flutter: ^8.1.2
+  geolocator: ^9.0.2
+  geocoding: ^2.1.0
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +68,7 @@ flutter:
     - assets/images/slider/
     - assets/texts/
     - assets/animations/
+    - assets/videos/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -4,6 +4,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../widgets/scrolling_scaffold.dart';
+import '../widgets/call_bottom_sheeet.dart';
 import '../widgets/redirect_button.dart';
 
 class AboutCallPoliceScreen extends StatelessWidget {
@@ -36,14 +37,14 @@ class AboutCallPoliceScreen extends StatelessWidget {
                     const SizedBox(
                       height: 16,
                     ),
-                    const SafeArea(
+                    SafeArea(
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: RedirectButton(
                           label: 'SOS Pomoc',
-                          route: '/work_in_progress',
+                          callback: () => CallBottomSheet.showDialog(context),
                           buttonColor: Colors.black,
-                          backgroundColor: Color(0xfffdbc47),
+                          backgroundColor: const Color(0xfffdbc47),
                         ),
                       ),
                     ),

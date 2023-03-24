@@ -7,6 +7,7 @@ import '../models/session_data.dart';
 class RedirectButton extends StatelessWidget {
   final String label;
   final String route;
+  final Function? callback;
   final Color buttonColor;
   final Color backgroundColor;
   final IconData? labelIcon;
@@ -15,18 +16,23 @@ class RedirectButton extends StatelessWidget {
     required this.label,
     this.labelIcon,
     this.route = '/',
+    this.callback,
     this.buttonColor = Colors.white,
     this.backgroundColor = Colors.black,
     Key? key,
-  }) : super(key: key);
+  })  : assert(route == '/' || callback == null,
+            'Both route and callback cannot be specified'),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
-      onPressed: () => context.go(
-        route,
-        extra: context.read<SessionData>().cookie,
-      ),
+      onPressed: () => callback == null
+          ? context.go(
+              route,
+              extra: context.read<SessionData>().cookie,
+            )
+          : callback!(),
       style: OutlinedButton.styleFrom(
         foregroundColor: buttonColor,
         backgroundColor: backgroundColor,
@@ -36,8 +42,7 @@ class RedirectButton extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          if (labelIcon != null)
-            Icon(labelIcon),
+          if (labelIcon != null) Icon(labelIcon),
           Text(
             label,
             style: Theme.of(context).textTheme.displaySmall?.copyWith(

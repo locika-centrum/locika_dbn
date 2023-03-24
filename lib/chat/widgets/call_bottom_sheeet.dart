@@ -1,0 +1,128 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:logging/logging.dart';
+
+Logger _log = Logger('call_botom_sheet.dart');
+
+class CallBottomSheet {
+  static void showDialog(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(
+            16.0,
+          ),
+        ),
+      ),
+      builder: (BuildContext context) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Wrap(
+            children: [
+              Align(
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  child: const Icon(
+                    Icons.cancel,
+                    color: Colors.grey,
+                  ),
+                  onTap: () => Navigator.pop(context),
+                ),
+              ),
+              const SafeArea(
+                child: GeolocatorWidget(),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class GeolocatorWidget extends StatefulWidget {
+  const GeolocatorWidget({Key? key}) : super(key: key);
+
+  @override
+  State<GeolocatorWidget> createState() => _GeolocatorWidgetState();
+}
+
+class _GeolocatorWidgetState extends State<GeolocatorWidget> {
+  final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
+
+  Position? position;
+  List<Placemark> placemarks = [];
+
+  @override
+  void initState() {
+    initStateAsync();
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: position == null
+          ? const Icon(Icons.location_off)
+          : const Icon(Icons.person_pin_circle),
+      title: Text(
+          '${placemarks.length == 0 ? 'Neznámá adresa' : placemarks.first.street}'),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(
+            height: 8,
+          ),
+          Text('šířka: ${position?.latitude ?? ''}'),
+          Text('délka: ${position?.longitude ?? ''}'),
+        ],
+      ),
+    );
+
+    // return Text(position.toString());
+    return ListTile(title: Text(placemarks.first.street ?? ''));
+  }
+
+  Future<void> initStateAsync() async {
+    position = await _getCurrentPositionNew();
+    if (position != null) {
+      placemarks = await placemarkFromCoordinates(
+          position!.latitude, position!.longitude);
+    }
+    setState(() {});
+
+    _log.finest(
+        'Position retrieved: $position, Placemarks found: ${placemarks.length}');
+  }
+
+  Future<Position?> _getCurrentPositionNew() async {
+    bool serviceEnabled = await _geolocatorPlatform.isLocationServiceEnabled();
+
+    if (serviceEnabled) {
+      LocationPermission permission =
+          await _geolocatorPlatform.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await _geolocatorPlatform.requestPermission();
+        if (permission == LocationPermission.denied) {
+          _log.finest('Location permissions denied');
+          return null;
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        _log.finest('Location permissions denied forever');
+        return null;
+      }
+
+      // Permission is granted - check the location
+      return await _geolocatorPlatform.getCurrentPosition();
+    }
+    _log.finest('Location service is not enabled');
+    return null;
+  }
+}

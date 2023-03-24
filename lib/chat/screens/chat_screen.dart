@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 import '../../settings/model/settings_data.dart';
 import '../../widgets/app_bar_chat.dart';
 import '../widgets/advisor_not_available.dart';
+import '../widgets/call_bottom_sheeet.dart';
 import '../widgets/date_chip.dart';
 
 import '../models/chat_response.dart';
@@ -183,7 +184,7 @@ class _ChatScreenState extends State<ChatScreen>
                 Container(
                   color: const Color(0xfffebd49),
                   child: InkWell(
-                    onTap: () => context.go('/work_in_progress'),
+                    onTap: () => CallBottomSheet.showDialog(context),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(

@@ -6,6 +6,7 @@ import 'package:logging/logging.dart';
 
 import '../../widgets/scrolling_scaffold.dart';
 import '../widgets/bullet_text.dart';
+import '../widgets/call_bottom_sheeet.dart';
 import '../widgets/menu_action_panel.dart';
 
 Logger _log = Logger('about_chat_screen.dart');
@@ -85,7 +86,7 @@ class AboutChatScreen extends StatelessWidget {
                     hintText: 'Kdy volat policii',
                     hintRoute: '/about_call_police',
                     actionButton: OutlinedButton(
-                      onPressed: () => context.go('/work_in_progress'),
+                      onPressed: () => CallBottomSheet.showDialog(context),
                       style: OutlinedButton.styleFrom(
                         backgroundColor: const Color(0xfffebd49),
                         foregroundColor: Colors.white,

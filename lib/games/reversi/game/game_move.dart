@@ -12,7 +12,7 @@ class GameMove extends GameMoveBase {
     required this.symbol,
     required this.humanPlayer,
     this.blackScore = 0,
-    this.whiteScore = 0
+    this.whiteScore = 0,
   });
 
   @override

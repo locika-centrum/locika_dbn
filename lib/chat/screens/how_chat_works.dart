@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:video_player/video_player.dart';
 
 import '../../widgets/scrolling_scaffold.dart';
 import '../widgets/bullet_text.dart';
@@ -13,24 +13,19 @@ class HowChatWorks extends StatefulWidget {
 }
 
 class _HowChatWorksState extends State<HowChatWorks> {
-  late YoutubePlayerController _controller;
+  late VideoPlayerController _controller;
 
   @override
   void initState() {
-    _controller = YoutubePlayerController(
-        initialVideoId: 'UkZqcT2XuBM',
-        flags: const YoutubePlayerFlags(
-          showLiveFullscreenButton: false,
-        ))
-      ..addListener(() => setState(() {}));
-
     super.initState();
-  }
 
-  @override
-  void deactivate() {
-    _controller.pause();
-    super.deactivate();
+    _controller = VideoPlayerController.asset('assets/videos/locika_clip.mp4');
+
+    _controller.addListener(() {
+      setState(() {});
+    });
+    _controller.initialize().then((_) => setState(() {}));
+    //_controller.play();
   }
 
   @override
@@ -63,8 +58,16 @@ class _HowChatWorksState extends State<HowChatWorks> {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Center(
-                child: YoutubePlayer(
-                  controller: _controller,
+                child: AspectRatio(
+                  aspectRatio: _controller.value.aspectRatio,
+                  child: Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: <Widget>[
+                      VideoPlayer(_controller),
+                      _ControlsOverlay(controller: _controller),
+                      VideoProgressIndicator(_controller, allowScrubbing: true),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -100,6 +103,42 @@ class _HowChatWorksState extends State<HowChatWorks> {
           actionRoute: '/login',
           actionBackgroundColor: const Color(0xff0567ad),
         )
+      ],
+    );
+  }
+}
+
+class _ControlsOverlay extends StatelessWidget {
+  const _ControlsOverlay({required this.controller});
+
+  final VideoPlayerController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        AnimatedSwitcher(
+          duration: const Duration(milliseconds: 50),
+          reverseDuration: const Duration(milliseconds: 200),
+          child: controller.value.isPlaying
+              ? const SizedBox.shrink()
+              : Container(
+                  color: Colors.black26,
+                  child: const Center(
+                    child: Icon(
+                      Icons.play_arrow,
+                      color: Colors.white,
+                      size: 100.0,
+                      semanticLabel: 'Play',
+                    ),
+                  ),
+                ),
+        ),
+        GestureDetector(
+          onTap: () {
+            controller.value.isPlaying ? controller.pause() : controller.play();
+          },
+        ),
       ],
     );
   }

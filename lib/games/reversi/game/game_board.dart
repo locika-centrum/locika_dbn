@@ -5,6 +5,8 @@ import 'package:logging/logging.dart';
 
 Logger _log = Logger('game_board.dart');
 
+const infinity = 9999999;
+
 class GameBoard {
   final int size;
   final List<Map<String, int>> _sizes = [
@@ -16,6 +18,7 @@ class GameBoard {
 
   late List<List<int?>> _board;
   late List<List<bool>> _validPositions;
+  late List<List<int>> _cellWeights;
   late int _rows, _cols;
   late int _symbol;
   late int _availableMoves;
@@ -45,6 +48,7 @@ class GameBoard {
     _validPositions = [
       for (var sublist in source._validPositions) [...sublist]
     ];
+    _cellWeights = source._cellWeights;
     _symbolCount = [...source._symbolCount];
     _availableMoves = source._availableMoves;
     _validMoves = source._validMoves;
@@ -74,6 +78,7 @@ class GameBoard {
       ),
       growable: false,
     );
+    _prepareCellWeights();
 
     // Initial position
     _board[_rows ~/ 2 - 1][_cols ~/ 2] = _board[_rows ~/ 2][_cols ~/ 2 - 1] = 0;
@@ -110,6 +115,17 @@ class GameBoard {
   GameMove _evaluateMove(GameMove move) {
     move.blackScore = _symbolCount[1];
     move.whiteScore = _symbolCount[0];
+
+    move.value = move.blackScore - move.whiteScore;
+
+    int positionValue = 0;
+    for (int row = 0; row < _rows; row++) {
+      for (int col = 0; col < _cols; col++) {
+        if (_board[row][col] == 1) positionValue += _cellWeights[row][col];
+        if (_board[row][col] == 0) positionValue -= _cellWeights[row][col];
+      }
+    }
+    move.value += positionValue;
 
     return move;
   }
@@ -168,8 +184,12 @@ class GameBoard {
     int? piece;
 
     for (int distance = 1; distance <= max(_rows, _cols); distance++) {
-      if (!isInside(move.row + rowStep * distance, move.col + colStep * distance)) return [];
-      piece = _board[move.row + rowStep * distance][move.col + colStep * distance];
+      if (!isInside(
+          move.row + rowStep * distance, move.col + colStep * distance)) {
+        return [];
+      }
+      piece =
+          _board[move.row + rowStep * distance][move.col + colStep * distance];
 
       if (piece == null) return [];
       if (piece == move.symbol) break;
@@ -182,5 +202,50 @@ class GameBoard {
       ));
     }
     return result;
+  }
+
+  void _prepareCellWeights() {
+    const int standardValue = 3;
+
+    _cellWeights = List.generate(
+      _rows,
+      (index) => List.generate(
+        _cols,
+        (index) => standardValue,
+        growable: false,
+      ),
+      growable: false,
+    );
+
+    for (int row = 0; row < _rows; row++) {
+      for (int col = 0; col < _cols; col++) {
+        if (row == 0 || col == 0 || row == _rows - 1 || col == _cols - 1) {
+          _cellWeights[row][col] = 5;
+        }
+        if (_cellWeights[row][col] == standardValue &&
+            (row == 1 || col == 1 || row == _rows - 2 || col == _cols - 2)) {
+          _cellWeights[row][col] = -5;
+        }
+
+        // Corners
+        if ((row == 0 || row == _rows - 1) && (col == 0 || col == _cols - 1)) {
+          _cellWeights[row][col] = 120;
+        }
+        // Inside corners
+        if ((row == 1 || row == _rows - 2) && (col == 1 || col == _cols - 2)) {
+          _cellWeights[row][col] = -40;
+        }
+      }
+    }
+
+    _cellWeights[0][2] = _cellWeights[0][_cols - 3] =
+      _cellWeights[_rows - 1][2] = _cellWeights[_rows - 1][_cols - 3] =
+      _cellWeights[2][0] = _cellWeights[2][_cols - 1] =
+      _cellWeights[_rows - 3][0] = _cellWeights[_rows - 3][_cols - 1] = 20;
+
+    _cellWeights[0][1] = _cellWeights[0][_cols - 2] =
+      _cellWeights[_rows - 1][1] = _cellWeights[_rows - 1][_cols - 2] =
+      _cellWeights[1][0] = _cellWeights[1][_cols - 1] =
+      _cellWeights[_rows - 2][0] = _cellWeights[_rows - 2][_cols - 1] = -20;
   }
 }

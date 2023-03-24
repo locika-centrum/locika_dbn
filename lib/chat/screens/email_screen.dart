@@ -50,6 +50,9 @@ class EmailScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+                  const SizedBox(
+                    height: 16.0,
+                  ),
                 ],
               ),
             );

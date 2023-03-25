@@ -1,13 +1,20 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:locika_dbn_test/chat/widgets/redirect_button.dart';
 import 'package:logging/logging.dart';
+
+import '../../utils/app_theme.dart';
 
 Logger _log = Logger('call_botom_sheet.dart');
 
 class CallBottomSheet {
+  // TODO put the correct phone number
+  static const number = '';
+
   static void showDialog(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -33,14 +40,30 @@ class CallBottomSheet {
                   onTap: () => Navigator.pop(context),
                 ),
               ),
-              const SafeArea(
+              const Padding(
+                padding: EdgeInsets.only(bottom: 24.0,),
                 child: GeolocatorWidget(),
+              ),
+              SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: RedirectButton(
+                    label: 'Volat policii',
+                    backgroundColor: AppTheme.primaryYellow,
+                    buttonColor: AppTheme.primaryTextYellow,
+                    callback: () => _makeCall(number),
+                  ),
+                ),
               ),
             ],
           ),
         );
       },
     );
+  }
+
+  static _makeCall(String number) async {
+    await FlutterPhoneDirectCaller.callNumber(number);
   }
 }
 
@@ -66,12 +89,19 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
 
   @override
   Widget build(BuildContext context) {
+    _log.finest(placemarks);
+    String address =
+        placemarks.isEmpty ? 'Neznámá adresa' : placemarks.first.street ?? '';
+    address +=
+        '\n${placemarks.isEmpty ? '' : placemarks.first.administrativeArea ?? ''}';
+    address +=
+        '\n${placemarks.isEmpty ? '' : placemarks.first.postalCode ?? ''}';
+
     return ListTile(
       leading: position == null
           ? const Icon(Icons.location_off)
           : const Icon(Icons.person_pin_circle),
-      title: Text(
-          '${placemarks.length == 0 ? 'Neznámá adresa' : placemarks.first.street}'),
+      title: Text(address),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

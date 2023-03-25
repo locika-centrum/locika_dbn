@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
+  static Color primaryBlue = const Color(0xff0567ad);
+  static Color primaryTextBlue = Colors.white;
+  static Color primaryYellow = const Color(0xfffebd49);
+  static Color primaryTextYellow = Colors.black;
+
   static ThemeData get gameTheme {
     return ThemeData(
       brightness: Brightness.light,

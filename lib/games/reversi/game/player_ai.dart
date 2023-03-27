@@ -8,8 +8,9 @@ Logger _log = Logger('reversi AIPlayer');
 
 class PlayerAI {
   final int symbol;
+  final int complexity;
 
-  PlayerAI(this.symbol);
+  PlayerAI(this.symbol, {this.complexity = 0});
 
   GameMove? move(GameBoard board) {
     final random = Random();
@@ -17,7 +18,7 @@ class PlayerAI {
     int bestMoveValue = -infinity;
 
     for (GameMove possibleMove in _possibleMoves(board)) {
-      int moveValue = _minMax(board, possibleMove, 4);
+      int moveValue = _minMax(board, possibleMove, complexity == 0 ? 2 : 4);
       if (moveValue > bestMoveValue) {
         bestMoveValue = moveValue;
         bestMoves.clear();

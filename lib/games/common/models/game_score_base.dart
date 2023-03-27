@@ -9,6 +9,8 @@ Logger _log = Logger('Abstract GameScore');
 abstract class GameScoreBase with ChangeNotifier, HiveObjectMixin {
   bool isReady = false;
 
+  List<String> get scoreTable => [noOfGames.toString(), highScore];
+
   int _noOfMoves = 0;
   int get noOfMoves => _noOfMoves;
   set noOfMoves(int count) {

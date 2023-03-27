@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:logging/logging.dart';
 
 import '../settings/model/settings_data.dart';
@@ -52,6 +53,27 @@ class SettingsScreen extends StatelessWidget {
                   );
                 },
               ),
+              SettingsTile.navigation(
+                leading: const Icon(Icons.psychology_alt),
+                title: const Text('Složitost'),
+                value: Text(context.select<SettingsData, String>((value) =>
+                    SettingsData.gameComplexities[value.gameComplexity])),
+                onPressed: (context) {
+                  GoRouter.of(context).push(
+                    '/settings_picker',
+                    extra: SettingsPickerData(
+                      title: 'Složitost hry',
+                      options: SettingsData.gameComplexities,
+                      selectedOption:
+                          context.read<SettingsData>().gameComplexity,
+                      onChange: (index) {
+                        context.read<SettingsData>().gameComplexity = index;
+                        _log.finest('New complexity: $index');
+                      },
+                    ),
+                  );
+                },
+              ),
               SettingsTile.switchTile(
                 initialValue: context.select<SettingsData, bool>(
                     (value) => value.tictactoeStartsHuman),
@@ -63,19 +85,6 @@ class SettingsScreen extends StatelessWidget {
                 title: const Text('Piškvorky: začíná hráč'),
                 onToggle: (value) {
                   context.read<SettingsData>().tictactoeStartsHuman = value;
-                },
-              ),
-              SettingsTile.switchTile(
-                initialValue: context.select<SettingsData, bool>(
-                    (value) => value.slidingPictures),
-                leading: Image.asset(
-                  'assets/images/game_icon_02.png',
-                  color: Colors.grey,
-                  height: 24,
-                ),
-                title: const Text('Puzzle: obrázky'),
-                onToggle: (value) {
-                  context.read<SettingsData>().slidingPictures = value;
                 },
               ),
               SettingsTile.switchTile(
@@ -143,8 +152,34 @@ class SettingsScreen extends StatelessWidget {
               )
             ],
           ),
+          SettingsSection(
+            title: const Text('O Aplikaci'),
+            tiles: [
+              SettingsTile(
+                leading: const Icon(Icons.info),
+                title: const Text('Verze'),
+                value: FutureBuilder<String>(
+                  future: _getVersion(),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<String> snapshot) {
+                    if (snapshot.hasData) {
+                      return Text(snapshot.data ?? '');
+                    } else {
+                      return Text('does not have data');
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
+  }
+
+  Future<String> _getVersion() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+    return '${packageInfo.version} - ${packageInfo.buildNumber}';
   }
 }

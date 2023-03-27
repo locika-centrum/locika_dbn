@@ -12,14 +12,14 @@ class SlidingGameScore extends GameScoreBase {
   static String hiveBoxName = 'sliding-score-box';
   static String dataKey = 'score';
 
-  static Future<SlidingGameScore> loadData(int gameSize) async {
+  static Future<SlidingGameScore> loadData(int gameSize, int gameComplexity) async {
     Box box = await Hive.openBox(hiveBoxName);
-    SlidingGameScore? result = box.get('${dataKey}_$gameSize');
-    _log.finest('Data from DB ($hiveBoxName, ${dataKey}_$gameSize): $result');
+    SlidingGameScore? result = box.get('${dataKey}_${gameSize}_$gameComplexity');
+    _log.finest('Data from DB ($hiveBoxName, ${dataKey}_${gameSize}_$gameComplexity): $result');
 
     if (result == null) {
       result = SlidingGameScore();
-      box.put('${dataKey}_$gameSize', result);
+      box.put('${dataKey}_${gameSize}_$gameComplexity', result);
     }
     result.isReady = true;
 

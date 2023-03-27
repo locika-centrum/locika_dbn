@@ -102,7 +102,7 @@ class _GameBoardWidgetState extends State<GameBoardWidget> {
       child: LayoutBuilder(builder: (context, constraint) {
         if (gameBoard.board[row][col] == null) return Container();
 
-        if (context.read<SettingsData>().slidingPictures) {
+        if (context.read<SettingsData>().gameComplexity > 0) {
           if (image == null) {
             return const CircularProgressIndicator();
           } else {

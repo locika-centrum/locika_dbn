@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../common/score_table.dart';
 import './widgets/game_board_widget.dart';
 import '../common/widgets/action_widget.dart';
 import '../common/widgets/record_widget.dart';
@@ -29,7 +30,9 @@ class ReversiScreen extends StatelessWidget {
       backgroundColor: backgroundColor,
       body: FutureProvider<ReversiGameScore>(
         create: (BuildContext context) async {
-          return ReversiGameScore.loadData(context.read<SettingsData>().gameSize);
+          return ReversiGameScore.loadData(
+              context.read<SettingsData>().gameSize,
+              context.read<SettingsData>().gameComplexity);
         },
         initialData: ReversiGameScore(),
         builder: (context, child) {
@@ -40,13 +43,23 @@ class ReversiScreen extends StatelessWidget {
         },
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 24.0),
-              child: Center(
-                child: Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleLarge,
+            InkWell(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 24.0),
+                child: Center(
+                  child: Text(
+                    title,
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
                 ),
+              ),
+              onTap: () => showHighScore(
+                context: context,
+                title: title,
+                hiveBoxName: ReversiGameScore.hiveBoxName,
+                dataKey: ReversiGameScore.dataKey,
+                complexity: context.read<SettingsData>().gameComplexity,
+                backgroundColor: backgroundColor,
               ),
             ),
             Expanded(
@@ -58,7 +71,8 @@ class ReversiScreen extends StatelessWidget {
                     child: SizedBox(
                       height: size,
                       width: size,
-                      child: GameBoardWidget(gameSize: context.read<SettingsData>().gameSize),
+                      child: GameBoardWidget(
+                          gameSize: context.read<SettingsData>().gameSize),
                     ),
                   );
                 },

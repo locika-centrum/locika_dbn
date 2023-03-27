@@ -8,8 +8,9 @@ Logger _log = Logger('tictactoe AIPlayer');
 
 class PlayerAI {
   final int symbol;
+  final int complexity;
 
-  PlayerAI(this.symbol);
+  PlayerAI(this.symbol, {this.complexity = 0});
 
   int _myValue(int value) => (symbol == 1 ? 1 : -1) * value;
 
@@ -24,8 +25,7 @@ class PlayerAI {
     assert(possibleMoves.isNotEmpty);
 
     for (GameMove move in possibleMoves) {
-      moveValue = _minMax(board, move, board.size < 2 ? 4 : 3);
-      // moveValue = _minMax(board, move, 4);
+      moveValue = _minMax(board, move, complexity == 0 ? 1 : (board.size < 2 ? 4 : 3));
       move.value = moveValue;
 
       // Evaluate the move value

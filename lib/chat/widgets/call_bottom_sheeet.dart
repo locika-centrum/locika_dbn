@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:locika_dbn_test/chat/widgets/redirect_button.dart';
 import 'package:logging/logging.dart';
 
 import '../../utils/app_theme.dart';
+import './redirect_button.dart';
 
 Logger _log = Logger('call_botom_sheet.dart');
 
@@ -113,9 +113,6 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
         ],
       ),
     );
-
-    // return Text(position.toString());
-    return ListTile(title: Text(placemarks.first.street ?? ''));
   }
 
   Future<void> initStateAsync() async {

@@ -1,9 +1,11 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:logging/logging.dart';
 
+import '../common/score_table.dart';
 import './widgets/game_board_widget.dart';
 import '../common/widgets/action_widget.dart';
 import '../common/widgets/record_widget.dart';
@@ -33,7 +35,8 @@ class TicTacToeScreen extends StatelessWidget {
       body: FutureProvider<TicTacToeGameScore>(
         create: (BuildContext context) async {
           return TicTacToeGameScore.loadData(
-              context.read<SettingsData>().gameSize);
+              context.read<SettingsData>().gameSize,
+              context.read<SettingsData>().gameComplexity);
         },
         initialData: TicTacToeGameScore(),
         builder: (context, child) {
@@ -44,13 +47,23 @@ class TicTacToeScreen extends StatelessWidget {
         },
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 24.0),
-              child: Center(
-                child: Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleLarge,
+            InkWell(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 24.0),
+                child: Center(
+                  child: Text(
+                    title,
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
                 ),
+              ),
+              onTap: () => showHighScore(
+                context: context,
+                title: title,
+                hiveBoxName: TicTacToeGameScore.hiveBoxName,
+                dataKey: TicTacToeGameScore.dataKey,
+                complexity: context.read<SettingsData>().gameComplexity,
+                backgroundColor: backgroundColor,
               ),
             ),
             Expanded(
@@ -62,7 +75,8 @@ class TicTacToeScreen extends StatelessWidget {
                     child: SizedBox(
                       height: size,
                       width: size,
-                      child: GameBoardWidget(gameSize: context.read<SettingsData>().gameSize),
+                      child: GameBoardWidget(
+                          gameSize: context.read<SettingsData>().gameSize),
                     ),
                   );
                 },

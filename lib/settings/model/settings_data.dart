@@ -8,6 +8,7 @@ class SettingsData extends ChangeNotifier with HiveObjectMixin {
   static const String hiveBoxName = 'settings-box';
   static const String settingsKey = 'settings';
   static const gameSizes = ['malá', 'střední', 'velká', 'největší'];
+  static const gameComplexities = ['jedoduchá', 'těžší'];
 
   bool _isReady = false;
   bool get isReady => _isReady;
@@ -26,9 +27,13 @@ class SettingsData extends ChangeNotifier with HiveObjectMixin {
     save();
   }
 
+  // TODO This field is obsolete
+  @Deprecated('This field is no longer used')
   @HiveField(1, defaultValue: false)
   bool _slidingPictures;
+  @Deprecated('This field is no longer used')
   bool get slidingPictures => _slidingPictures;
+  @Deprecated('This field is no longer used')
   set slidingPictures(bool value) {
     _slidingPictures = value;
     notifyListeners();
@@ -76,14 +81,26 @@ class SettingsData extends ChangeNotifier with HiveObjectMixin {
     save();
   }
 
+  @HiveField(6, defaultValue: 1)
+  int _gameComplexity;
+  int get gameComplexity => _gameComplexity;
+  set gameComplexity(int complexity) {
+    _gameComplexity = complexity;
+    notifyListeners();
+
+    save();
+  }
+
   SettingsData({
     int gameSize = 0,
+    int gameComplexity = 1,
     bool slidingPictures = false,
     bool tictactoeStartsHuman = true,
     bool reversiStartsHuman = true,
     String nickName = '',
     bool firstLogin = true,
   })  : _gameSize = gameSize,
+        _gameComplexity = gameComplexity,
         _slidingPictures = slidingPictures,
         _tictactoeStartsHuman = tictactoeStartsHuman,
         _reversiStartsHuman = reversiStartsHuman,
@@ -92,7 +109,7 @@ class SettingsData extends ChangeNotifier with HiveObjectMixin {
 
   @override
   String toString() {
-    return '{gameSize: $gameSize, slidingPictures: $slidingPictures, tictactoeStartsHuman: $tictactoeStartsHuman, reversiStartsHuman: $reversiStartsHuman,}';
+    return '{gameSize: $gameSize, gameComplexity: $gameComplexity, tictactoeStartsHuman: $tictactoeStartsHuman, reversiStartsHuman: $reversiStartsHuman,}';
   }
 }
 

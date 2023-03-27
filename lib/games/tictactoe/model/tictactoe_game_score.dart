@@ -13,19 +13,25 @@ class TicTacToeGameScore extends GameScoreBase {
   static String hiveBoxName = 'tictactoe-score-box';
   static String dataKey = 'score';
 
+  @override
+  List<String> get scoreTable => [noOfGames.toString(), gameScore];
+
   TicTacToeGameScore({int noOfGames = 0, int noOfWins = 0, int noOfLosses = 0})
       : _noOfGames = noOfGames,
         _noOfWins = noOfWins,
         _noOfLosses = noOfLosses;
 
-  static Future<TicTacToeGameScore> loadData(int gameSize) async {
+  static Future<TicTacToeGameScore> loadData(
+      int gameSize, int gameComplexity) async {
     Box box = await Hive.openBox(hiveBoxName);
-    TicTacToeGameScore? result = box.get('${dataKey}_$gameSize');
-    _log.finest('Data from DB ($hiveBoxName, ${dataKey}_$gameSize): $result');
+    TicTacToeGameScore? result =
+        box.get('${dataKey}_${gameSize}_$gameComplexity');
+    _log.finest(
+        'Data from DB ($hiveBoxName, ${dataKey}_${gameSize}_$gameComplexity): $result');
 
     if (result == null) {
       result = TicTacToeGameScore();
-      box.put('${dataKey}_$gameSize', result);
+      box.put('${dataKey}_${gameSize}_$gameComplexity', result);
     }
     result.isReady = true;
 

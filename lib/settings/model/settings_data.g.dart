@@ -22,13 +22,14 @@ class SettingsDataAdapter extends TypeAdapter<SettingsData> {
       .._tictactoeStartsHuman = fields[2] == null ? true : fields[2] as bool
       .._reversiStartsHuman = fields[3] == null ? true : fields[3] as bool
       .._nickName = fields[4] == null ? '' : fields[4] as String
-      .._firstLogin = fields[5] == null ? true : fields[5] as bool;
+      .._firstLogin = fields[5] == null ? true : fields[5] as bool
+      .._gameComplexity = fields[6] == null ? 1 : fields[6] as int;
   }
 
   @override
   void write(BinaryWriter writer, SettingsData obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj._gameSize)
       ..writeByte(1)
@@ -40,7 +41,9 @@ class SettingsDataAdapter extends TypeAdapter<SettingsData> {
       ..writeByte(4)
       ..write(obj._nickName)
       ..writeByte(5)
-      ..write(obj._firstLogin);
+      ..write(obj._firstLogin)
+      ..writeByte(6)
+      ..write(obj._gameComplexity);
   }
 
   @override

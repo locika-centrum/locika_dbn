@@ -19,14 +19,14 @@ class ReversiGameScore extends GameScoreBase {
         _noOfWins = noOfWins,
         _noOfLosses = noOfLosses;
 
-  static Future<ReversiGameScore> loadData(int gameSize) async {
+  static Future<ReversiGameScore> loadData(int gameSize, int gameComplexity) async {
     Box box = await Hive.openBox(hiveBoxName);
-    ReversiGameScore? result = box.get('${dataKey}_$gameSize');
-    _log.finest('Data from DB ($hiveBoxName, ${dataKey}_$gameSize): $result');
+    ReversiGameScore? result = box.get('${dataKey}_${gameSize}_$gameComplexity');
+    _log.finest('Data from DB ($hiveBoxName, ${dataKey}_${gameSize}_$gameComplexity): $result');
 
     if (result == null) {
       result = ReversiGameScore();
-      box.put('${dataKey}_$gameSize', result);
+      box.put('${dataKey}_${gameSize}_$gameComplexity', result);
     }
     result.isReady = true;
 

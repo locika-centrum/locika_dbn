@@ -33,8 +33,10 @@ class _GameBoardWidgetState extends State<GameBoardWidget> {
     if (Provider.of<GameScoreBase>(context).lastMove == null) {
       _log.finest('*** NEW GAME ***');
       gameBoard = GameBoard(size: widget.gameSize);
-      playerAI =
-          PlayerAI(context.read<SettingsData>().tictactoeStartsHuman ? 0 : 1);
+      playerAI = PlayerAI(
+        context.read<SettingsData>().tictactoeStartsHuman ? 0 : 1,
+        complexity: context.read<SettingsData>().gameComplexity,
+      );
 
       if (gameBoard.symbol == playerAI.symbol) {
         isLocked = true;
@@ -74,8 +76,13 @@ class _GameBoardWidgetState extends State<GameBoardWidget> {
         borderRadius: BorderRadius.circular(6),
         child: GestureDetector(
           onTap: () => _gridItemTapped(row, col),
-          child:
-              Container(color: Colors.white, child: _buildBoardItem(row, col)),
+          child: Container(
+            color: gameBoard.board[row][col] == null ||
+                    gameBoard.board[row][col]! < 2
+                ? Colors.white
+                : Colors.amber.shade100,
+            child: _buildBoardItem(row, col),
+          ),
         ),
       ),
     );
@@ -86,7 +93,7 @@ class _GameBoardWidgetState extends State<GameBoardWidget> {
       child: LayoutBuilder(builder: (context, constraint) {
         if (gameBoard.board[row][col] == null) return Container();
 
-        return gameBoard.board[row][col] == 0
+        return (gameBoard.board[row][col]! % 2) == 0
             ? Image.asset(
                 'assets/images/tictactoe_circle.png',
                 height: 0.8 * constraint.biggest.height,
@@ -132,6 +139,10 @@ class _GameBoardWidgetState extends State<GameBoardWidget> {
     context.read<GameScoreBase>().move(move);
 
     if (move.winning) {
+      setState(() {
+        gameBoard.markWinner(move);
+      });
+
       result = true;
     } else if (gameBoard.availableMoves == 0) {
       context.read<GameScoreBase>().gameOver();

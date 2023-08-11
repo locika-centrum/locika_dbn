@@ -18,8 +18,8 @@ class GameBoard {
   final List<Map<String, int>> _sizes = [
     {'size': 0, 'rows': 3, 'cols': 3, 'winning-len': 3},
     {'size': 1, 'rows': 5, 'cols': 5, 'winning-len': 4},
-    {'size': 2, 'rows': 7, 'cols': 7, 'winning-len': 5},
-    {'size': 3, 'rows': 11, 'cols': 11, 'winning-len': 5},
+    {'size': 2, 'rows': 10, 'cols': 10, 'winning-len': 5},
+    {'size': 3, 'rows': 12, 'cols': 12, 'winning-len': 5},
   ];
 
   late List<List<int?>> _board;
@@ -106,6 +106,41 @@ class GameBoard {
     }
 
     return move;
+  }
+
+  void markWinner(GameMove move) {
+    List<int>? direction;
+
+    switch (move.winDirection) {
+      case Direction.horizontal:
+        direction = [0, 1];
+        break;
+      case Direction.vertical:
+        direction = [1, 0];
+        break;
+      case Direction.diagonalLTRB:
+        direction = [1, 1];
+        break;
+      case Direction.diagonalRTLB:
+        direction = [1, -1];
+        break;
+      default:
+        direction = null;
+    }
+
+    if (direction != null) {
+      for (int step = -1; step < 2; step += 2) {
+        for (int path = 0; path < _winningLen; path++) {
+          List<int> cell = [move.row + step * path * direction[0], move.col + step * path * direction[1]];
+
+          if (isInside(cell[0], cell[1]) && _board[cell[0]][cell[1]] != null) {
+            if (_board[cell[0]][cell[1]] == move.symbol) {
+              _board[cell[0]][cell[1]] = (_board[cell[0]][cell[1]] ?? 0) + 2;
+            }
+          }
+        }
+      }
+    }
   }
 
   GameMove _evaluateMove(GameMove move) {

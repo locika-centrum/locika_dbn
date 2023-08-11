@@ -37,8 +37,10 @@ class _GameBoardWidgetState extends State<GameBoardWidget> {
     if (Provider.of<GameScoreBase>(context).lastMove == null && !pass) {
       _log.finest('*** NEW GAME ***');
       gameBoard = GameBoard(size: widget.gameSize);
-      playerAI =
-          PlayerAI(context.read<SettingsData>().reversiStartsHuman ? 0 : 1);
+      playerAI = PlayerAI(
+        context.read<SettingsData>().reversiStartsHuman ? 0 : 1,
+        complexity: context.read<SettingsData>().gameComplexity,
+      );
 
       if (gameBoard.symbol == playerAI.symbol) {
         isLocked = true;
@@ -106,11 +108,13 @@ class _GameBoardWidgetState extends State<GameBoardWidget> {
   }
 
   void _skipMove() {
-    _log.finest('*** PASS CONFIRMED ${gameBoard.symbol == playerAI.symbol ? 'Computer' : 'Human'}');
+    _log.finest(
+        '*** PASS CONFIRMED ${gameBoard.symbol == playerAI.symbol ? 'Computer' : 'Human'}');
     gameBoard.skipMove();
     context.read<GameScoreBase>().setAction(null);
 
-    _log.finest('*** NEXT PLAYER IS ${gameBoard.symbol == playerAI.symbol ? 'Computer' : 'Human'}');
+    _log.finest(
+        '*** NEXT PLAYER IS ${gameBoard.symbol == playerAI.symbol ? 'Computer' : 'Human'}');
     _log.finest('VALID MOVES: ${gameBoard.validMoves}');
 
     // Computer if it was the Human pass
@@ -156,7 +160,6 @@ class _GameBoardWidgetState extends State<GameBoardWidget> {
     if (!_isEndMove(move)) {
       if (move != null) {
         if (gameBoard.validMoves == 0) {
-
           // Human cannot play - forced pass
           _isEndMove(null);
           /*
@@ -178,7 +181,8 @@ class _GameBoardWidgetState extends State<GameBoardWidget> {
 
     // Pass move
     if (move == null) {
-      _log.finest('${gameBoard.symbol == playerAI.symbol ? 'COMPUTER' : 'HUMAN'} will be forded to pass');
+      _log.finest(
+          '${gameBoard.symbol == playerAI.symbol ? 'COMPUTER' : 'HUMAN'} will be forded to pass');
       if (pass) {
         _log.finest('Game over: 2x pass');
         context.read<GameScoreBase>().gameOver();
@@ -187,9 +191,7 @@ class _GameBoardWidgetState extends State<GameBoardWidget> {
       } else {
         _log.finest('Need to pass - no moves found');
         pass = true;
-        context
-            .read<GameScoreBase>()
-            .setAction(_skipMove, 'Vynechat');
+        context.read<GameScoreBase>().setAction(_skipMove, 'Vynechat');
       }
     } else {
       // Record move
@@ -208,7 +210,8 @@ class _GameBoardWidgetState extends State<GameBoardWidget> {
 
     setState(() {});
 
-    _log.finest('End Move: $result - {humanPlayer: ${gameBoard.symbol == playerAI.symbol}, pass: $pass}');
+    _log.finest(
+        'End Move: $result - {humanPlayer: ${gameBoard.symbol == playerAI.symbol}, pass: $pass}');
     return result;
   }
 }

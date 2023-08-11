@@ -24,6 +24,7 @@ class PlayerAI {
     List<GameMove> possibleMoves = _possibleMoves(board);
     assert(possibleMoves.isNotEmpty);
 
+    _log.finest('Move with complexity $complexity');
     for (GameMove move in possibleMoves) {
       moveValue = _minMax(board, move, complexity == 0 ? 1 : (board.size < 2 ? 4 : 3));
       move.value = moveValue;

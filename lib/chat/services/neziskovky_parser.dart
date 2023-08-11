@@ -446,6 +446,14 @@ Future<ChatResponse> postMessage({
   return result;
 }
 
+Future<String> sendMail({
+  required
+}) async {
+  String result = '';
+
+  return result;
+}
+
 Future<http.Response> _queryServer({
   required _HttpMethod method,
   required String query,

@@ -10,10 +10,10 @@ const infinity = 9999999;
 class GameBoard {
   final int size;
   final List<Map<String, int>> _sizes = [
-    {'size': 0, 'rows': 4, 'cols': 4},
-    {'size': 1, 'rows': 6, 'cols': 6},
-    {'size': 2, 'rows': 8, 'cols': 8},
-    {'size': 3, 'rows': 10, 'cols': 10},
+    {'size': 0, 'rows': 6, 'cols': 6},
+    {'size': 1, 'rows': 8, 'cols': 8},
+    {'size': 2, 'rows': 10, 'cols': 10},
+    {'size': 3, 'rows': 12, 'cols': 12},
   ];
 
   late List<List<int?>> _board;

@@ -18,7 +18,7 @@ class PlayerAI {
     int bestMoveValue = -infinity;
 
     for (GameMove possibleMove in _possibleMoves(board)) {
-      int moveValue = _minMax(board, possibleMove, complexity == 0 ? 2 : 4);
+      int moveValue = _minMax(board, possibleMove, complexity == 0 ? 1 : 4);
       if (moveValue > bestMoveValue) {
         bestMoveValue = moveValue;
         bestMoves.clear();

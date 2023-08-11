@@ -28,11 +28,16 @@ Future<void> showHighScore({
 
     _log.finest(
         'complexity: $complexity, size: $size, scoreTable: ${result?.scoreTable}');
+
+    String highScore = result?.scoreTable[1].toString() ?? '-';
+    if (highScore.split(':').isNotEmpty) {
+      highScore = highScore.replaceFirst(':', ' : ');
+    }
     scoreData.add(Map.from({
       'title': 'entry',
       'size': SettingsData.gameSizes[size],
       'games': result?.scoreTable[0].toString() ?? '-',
-      'highScore': result?.scoreTable[1].toString() ?? '-',
+      'highScore': highScore,
     }));
 
     totalGames += int.parse(result?.scoreTable[0] ?? '0');
@@ -41,7 +46,7 @@ Future<void> showHighScore({
 
       totalScore = totalScore != '-'
           ? totalScore
-          : (score.length == 2 ? '0:0' : totalScore);
+          : (score.length == 2 ? '0 : 0' : totalScore);
 
       if (score.length == 2) {
         List<String> totalScoreValue = totalScore.split(':');
@@ -50,7 +55,7 @@ Future<void> showHighScore({
         totalScoreValue[1] =
             (int.parse(totalScoreValue[1]) + int.parse(score[1])).toString();
 
-        totalScore = '${totalScoreValue[0]}:${totalScoreValue[1]}';
+        totalScore = '${totalScoreValue[0]} : ${totalScoreValue[1]}';
       }
     }
   }
@@ -92,31 +97,48 @@ Future<void> showHighScore({
                 ),
               ),
               Padding(
-                padding:
-                    const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 32.0),
+                padding: const EdgeInsets.only(
+                    left: 16.0, right: 16.0, bottom: 32.0),
                 child: Text(
                   'Hra ${SettingsData.gameComplexities[complexity]}',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
               DataTable(
-                columns: const <DataColumn>[
-                  DataColumn(
+                columns: <DataColumn>[
+                  const DataColumn(
                     label: Text(''),
                   ),
                   DataColumn(
-                    label: Text('P O Č E T   H E R'),
+                    label: Text(
+                      _upperText('her'),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ),
                   DataColumn(
-                    label: Text('S C O R E'),
+                    label: Text(
+                      _upperText('score'),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ],
                 rows: <DataRow>[
                   for (Map score in scoreData)
                     DataRow(cells: <DataCell>[
-                      DataCell(Text(score['size'])),
-                      DataCell(Text(score['games'])),
-                      DataCell(Text(score['highScore'])),
+                      DataCell(
+                        Text(
+                          _upperText(score['size']),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      DataCell(Text(
+                        score['games'],
+                        textAlign: TextAlign.center,
+                      )),
+                      DataCell(Text(
+                        score['highScore'],
+                        textAlign: TextAlign.center,
+                      )),
                     ]),
                 ],
               ),
@@ -129,4 +151,14 @@ Future<void> showHighScore({
       );
     },
   );
+}
+
+String _upperText(String text) {
+  String result = '';
+
+  for (int index = 0; index < text.length; index++) {
+    result += '${text[index].toUpperCase()} ';
+  }
+
+  return result;
 }

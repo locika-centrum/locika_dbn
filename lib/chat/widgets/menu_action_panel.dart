@@ -54,7 +54,8 @@ class MenuActionPanel extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title,
+            if (title != '')
+              Text(title,
                 style: Theme.of(context).textTheme.displaySmall?.copyWith(
                       fontWeight: FontWeight.bold,
                     )),

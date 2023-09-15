@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:logging/logging.dart';
 
 import '../settings/model/settings_data.dart';
@@ -14,7 +18,7 @@ import '../games/reversi/model/reversi_game_score.dart';
 
 Logger _log = Logger('settings_screen.dart');
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   final String title;
   final Color backgroundColor;
 
@@ -25,9 +29,60 @@ class SettingsScreen extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  ConnectivityResult _connectionStatus = ConnectivityResult.none;
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+
+  @override
+  void initState() {
+    super.initState();
+
+    initConnectivity();
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+  }
+
+  Future<void> initConnectivity() async {
+    late ConnectivityResult result;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      _log.severe('Couldn\'t check connectivity status', e);
+      return;
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+    return _updateConnectionStatus(result);
+  }
+
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    setState(() {
+      _connectionStatus = result;
+    });
+  }
+
+  @override
+  void dispose() {
+    _connectivitySubscription.cancel();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: widget.backgroundColor,
       body: SettingsList(
         sections: [
           SettingsSection(
@@ -169,6 +224,11 @@ class SettingsScreen extends StatelessWidget {
                     }
                   },
                 ),
+              ),
+              SettingsTile(
+                leading: const Icon(Icons.network_check),
+                title: const Text('Data'),
+                value: Text(_connectionStatus.name),
               ),
             ],
           ),

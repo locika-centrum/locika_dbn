@@ -108,11 +108,29 @@ class _ChatLoginScreenState extends State<ChatLoginScreen> {
                 ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: OutlinedButton(
+                onPressed: () => context.go('/sign_up'),
+                style: OutlinedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.black,
+                  minimumSize: const Size.fromHeight(48.0),
+                  shape: const StadiumBorder(),
+                ),
+                child: Text(
+                  'Ještě nemám účet',
+                  style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                    color: const Color(0xff0567ad),
+                  ),
+                ),
+              ),
+            ),
             SafeArea(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: OutlinedButton(
-                  onPressed: () => context.go('/sign_up'),
+                  onPressed: () => context.go('/reset_password'),
                   style: OutlinedButton.styleFrom(
                     backgroundColor: Colors.white,
                     foregroundColor: Colors.black,
@@ -120,7 +138,7 @@ class _ChatLoginScreenState extends State<ChatLoginScreen> {
                     shape: const StadiumBorder(),
                   ),
                   child: Text(
-                    'Ještě nemám účet',
+                    'Zapomenuté heslo',
                     style: Theme.of(context).textTheme.displaySmall?.copyWith(
                       color: const Color(0xff0567ad),
                     ),

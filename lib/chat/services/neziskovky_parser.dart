@@ -446,10 +446,59 @@ Future<ChatResponse> postMessage({
   return result;
 }
 
-Future<String> sendMail({
-  required
-}) async {
+Future<String> sendMail({required}) async {
   String result = '';
+
+  return result;
+}
+
+Future<ChatResponse> resetPassword({
+  required String nickName,
+  required String email,
+}) async {
+  ChatResponse result;
+  PostParameters body;
+
+  body = PostParameters();
+  body.add('page_include', 'p_users_password');
+  body.add('templ', 'index');
+  body.add('odeslat', 'yes');
+  body.add('uname', '');
+  body.add('obnovit_jmeno', nickName);
+  body.add('obnovit_email', email);
+
+  _log.finest('resetPassword: nickName = $nickName, email: $email');
+
+  http.Response response = await _queryServer(
+    method: _HttpMethod.post,
+    query: 'templ=s_users',
+    body: body.parameters,
+  );
+
+  result = ChatResponse(
+      statusCode: response.statusCode,
+      cookie: response.headers.containsKey('set-cookie')
+          ? Cookie.fromSetCookieValue(response.headers['set-cookie']!)
+          : null);
+  if (result.statusCode == 200) {
+    _log.finest('resetPassword successful');
+
+    Document document = parse(response.body);
+    List<Element> elements = document.getElementsByClassName('panel-body');
+    _log.finest('ELEMENTS LENGTH: ${elements.length}');
+    _log.finest('1st ELEMENT    : ${elements[0].text}');
+
+    if (elements.length == 1) {
+      result.message = elements[0].text.trim().replaceAll(RegExp(r'/\n/g'), '');
+      result.message = result.message?.replaceAll(RegExp(r'(\()|(\sOK\))'), '');
+
+      _log.finest('message      : ${result.message}');
+    } else {
+      _log.warning('Unexpected HTML response');
+      result.statusCode = _BAD_REQUEST;
+    }
+  }
+  result = ChatResponse(statusCode: 200);
 
   return result;
 }

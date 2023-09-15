@@ -16,12 +16,14 @@ import 'chat/screens/chat_screen.dart';
 import 'chat/screens/about_chat_screen.dart';
 import 'chat/screens/chat_login_screen.dart';
 import 'chat/screens/chat_sign_up_screen.dart';
+import 'chat/screens/chat_reset_password_screen.dart';
 import 'chat/models/chat_response.dart';
 import 'chat/screens/about_call_police_screen.dart';
 import 'chat/screens/how_chat_works.dart';
 import 'chat/screens/chat_rules_screen.dart';
 import 'chat/screens/most_interesting_facts_screen.dart';
 import 'chat/screens/email_screen.dart';
+import 'chat/screens/about_reset_password_screen.dart';
 
 import 'chat/services/neziskovky_parser.dart';
 
@@ -186,6 +188,12 @@ class MyApp extends StatelessWidget {
         builder: (context, state) => const ChatSignUpScreen(),
       ),
       GoRoute(
+        path: '/reset_password',
+        builder: (context, state) => ChatResetPassword(
+          nickName: context.read<SettingsData>().nickName,
+        ),
+      ),
+      GoRoute(
           path: '/chat',
           builder: (context, state) {
             Cookie cookie =
@@ -223,6 +231,10 @@ class MyApp extends StatelessWidget {
         builder: (context, state) => const EmailScreen(),
       ),
       GoRoute(
+        path: '/about_reset_password',
+        builder: (context, state) => const AboutResetPasswordScreen(),
+      ),
+      GoRoute(
         path: '/work_in_progress',
         builder: (context, state) => const WorkInProgressScreen(),
       ),
@@ -240,6 +252,7 @@ class MyApp extends StatelessWidget {
       routeInformationProvider: _router.routeInformationProvider,
       routeInformationParser: _router.routeInformationParser,
       routerDelegate: _router.routerDelegate,
+      debugShowCheckedModeBanner: false,
     );
   }
 }

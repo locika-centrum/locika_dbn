@@ -39,11 +39,17 @@ class AdvisorNotAvailable extends StatelessWidget {
           ),
           const BubbleSpecialThree(
             text:
-                'Bohužel momentálně jsou všichni naši poradci offline.\nPřicházíš pravděpodobně mimo provozní dobu naší poradny.\nJejí aktuální podobu najdeš na https://locika.neziskovky.com/\nPokud s někým potřebuješ mluvit, můžeš se vrátit v době, kdy je CHAT otevřený, kontaktovat některou z nonstop krizových linek (proklik) nebo nám můžeš poslat zprávu (proklik na mail) a my se ti ozveme.',
+                'Je nám líto, ale všichni poradci jsou offline. Přicházíš pravděpodobně mimo provozní dobu naší poradny. Její aktuální podobu najdeš na locika.neziskovky.cz',
             isSender: false,
             tail: true,
             color: Colors.white,
           ),
+          const BubbleSpecialThree(
+            text: 'Pokud se potřebuješ svěřit, volej: ORGANIZACE A TELEFON. Nebo nám napiš e-mail a my se ti co nejdříve ozveme.',
+            isSender: false,
+            tail: true,
+            color: Colors.white,
+          )
         ],
       );
     }

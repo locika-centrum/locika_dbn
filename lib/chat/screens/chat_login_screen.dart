@@ -42,6 +42,7 @@ class _ChatLoginScreenState extends State<ChatLoginScreen> {
       appBar: const ChatAppBar(
         route: '/',
       ),
+      resizeToAvoidBottomInset : false,
       body: Padding(
         padding: const EdgeInsets.only(left: 24, right: 24),
         child: Column(
@@ -147,8 +148,7 @@ class _ChatLoginScreenState extends State<ChatLoginScreen> {
               ),
             ),
           ],
-        ),
-      ),
+        ),),
     );
   }
 

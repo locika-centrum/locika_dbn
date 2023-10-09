@@ -56,7 +56,7 @@ class AboutChatScreen extends StatelessWidget {
                     ),
                   ),
                   MenuActionPanel(
-                    title: 'Můžeš s námi chatovoat',
+                    title: 'Můžeš s námi chatovat',
                     text:
                     'Žádný problém není tak malý nebo tak velký, aby se nedal řešit. Jsme tady pro tebe.',
                     backgroundColor: const Color(0xff0567ad).withOpacity(0.15),

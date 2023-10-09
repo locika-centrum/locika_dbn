@@ -41,6 +41,7 @@ class _ChatResetPasswordState extends State<ChatResetPassword> {
       appBar: const ChatAppBar(
         route: '/',
       ),
+      resizeToAvoidBottomInset : false,
       body: Column(
         children: [
           Padding(
@@ -90,7 +91,7 @@ class _ChatResetPasswordState extends State<ChatResetPassword> {
           ),
           MenuActionPanel(
             title: 'Neznám heslo',
-            text: 'Když zapomeneš svoje heslo - nevadí, je možné požádat o jeho nové nastavení',
+            text: 'Když zapomeneš svoje heslo, tak se nic neděje. Stačí vyplnit údaje a kliknout na Změna hesla.',
             hintText: 'Jak to proběhne',
             hintRoute: '/about_reset_password',
             backgroundColor: const Color(0xff0567ad).withOpacity(0.15),

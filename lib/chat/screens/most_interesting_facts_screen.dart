@@ -22,13 +22,13 @@ class MostInterestingFactsScreen extends StatelessWidget {
           children: [
             HintItem(
               hintText:
-                  'Bojím se doma o sebe a své nejbližší. Cítím strach, vztek, úzkost, lítost…co mám dělat?',
+                  'Bojím se, zlobím se, chce se mi brečet... Co mám dělat?',
               hintIcon: Icons.help_outline,
               hintCallback: () => showDialog(context, 'interesting01.md'),
             ),
             HintItem(
               hintText:
-                  'Co s námi/se mnou bude, když o situaci doma někomu řeknu',
+                  'Co se stane, když o tom, co se děje řeknu?',
               hintIcon: Icons.help_outline,
               hintCallback: () => showDialog(context, 'interesting02.md'),
             ),
@@ -53,6 +53,7 @@ class MostInterestingFactsScreen extends StatelessWidget {
   void showDialog(BuildContext context, String asset) {
     showModalBottomSheet<void>(
         context: context,
+        isScrollControlled: true,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             top: Radius.circular(

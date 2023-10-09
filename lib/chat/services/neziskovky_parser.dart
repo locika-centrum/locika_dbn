@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 
@@ -16,6 +17,7 @@ const String _scheme = 'https';
 const String _host = 'chat.neziskovky.com';
 // const String _host = 'locika.neziskovky.com';
 const String _cgiPath = 'fcgi/sonic.cgi';
+const String _locikaMail = 'david.svejda@me.com';
 
 const int _OK = 200;
 const int _BAD_REQUEST = 400;
@@ -446,8 +448,84 @@ Future<ChatResponse> postMessage({
   return result;
 }
 
-Future<String> sendMail({required}) async {
+Future<String> sendMailThroughClient({
+  required String email,
+  required String messagereal,
+}) async {
   String result = '';
+  String platformResponse;
+
+  final Email email = Email(
+    subject: 'Zpráva z mobilní aplikace DBN',
+    body: messagereal,
+    isHTML: false,
+    recipients: [_locikaMail],
+  );
+
+  try {
+    await FlutterEmailSender.send(email);
+    platformResponse = 'success';
+  } catch (error) {
+    platformResponse = error.toString();
+  }
+
+  _log.finest(platformResponse);
+
+  return result;
+}
+
+Future<ChatResponse> sendMailThroughForm({
+  required String email,
+  required String messagereal,
+}) async {
+  PostParameters body;
+  ChatResponse result;
+  String? token;
+  Cookie? cookie;
+
+  http.Response response = await _queryServer(
+    method: _HttpMethod.get,
+    query: 'templ=p_login_reg_simple',
+  );
+  cookie = response.headers.containsKey('set-cookie')
+      ? Cookie.fromSetCookieValue(response.headers['set-cookie']!)
+      : null;
+  result = ChatResponse(statusCode: response.statusCode, cookie: cookie);
+  if (result.statusCode == _OK) {
+    Document document = parse(response.body);
+    for (var element in document.getElementsByTagName('input')) {
+      if (element.attributes.containsKey('name')) {
+        if (element.attributes['name'] == 'pisnicka_bezi') {
+          token = element.attributes['value'];
+        }
+      }
+    }
+
+    body = PostParameters();
+    body.add('p_guestbook_type', '');
+    body.add('id_rodic', '');
+    body.add('vip_heslo', '');
+    body.add('odeslat', 'yes');
+    body.add('pisnicka_bezi', token);
+    body.add('message', '');
+    body.add('url', '');
+    body.add('templ', 'index');
+    body.add('page_include', 'p_kontakt');
+    body.add('poslat_zpravu', 'a');
+    body.add('email', email);
+    body.add('messagereal', messagereal);
+    body.add('sender', '');
+    body.add('subject', '');
+
+    _log.finest('sending main through form: email = $email}');
+
+    response = await _queryServer(
+      method: _HttpMethod.post,
+      query: 'kontakty.html',
+      file: true,
+      body: body.parameters,
+    );
+  }
 
   return result;
 }

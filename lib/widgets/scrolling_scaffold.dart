@@ -10,10 +10,12 @@ class ActionButtonData {
   String actionRoute;
   Color actionColor;
   Color actionBackgroundColor;
+  Function? callback;
 
   ActionButtonData({
     required this.actionString,
     this.actionRoute = '/',
+    this.callback,
     this.actionColor = Colors.white,
     this.actionBackgroundColor = Colors.black,
   });
@@ -82,6 +84,7 @@ class _ScrollingScaffoldState extends State<ScrollingScaffold> {
                         child: RedirectButton(
                           label: widget.actionButtonData[index].actionString,
                           route: widget.actionButtonData[index].actionRoute,
+                          callback: widget.actionButtonData[index].callback,
                           buttonColor:
                               widget.actionButtonData[index].actionColor,
                           backgroundColor: widget

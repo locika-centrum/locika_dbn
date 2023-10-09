@@ -18,15 +18,15 @@ class AboutResetPasswordScreen extends StatelessWidget {
               height: 16.0,
             ),
             BulletText(
-              text: 'Dostaneš mail na udanou adresu s odkazem na stránky https://locika.neziskovky.com/ kterým potvrdíš reset hesla.',
+              text: 'Dostaneš e-mail na tvoji adresu s odkazem na stránky https://locika.neziskovky.com, kterým potvrdíš reset hesla.',
               color: BulletColor.blue,
             ),
             BulletText(
-              text: 'Na základě potvrzení ti přijde druhý mail s novým heslem.',
+              text: 'Až potvrdíš reset hesla. přijde druhý e-mail s novým heslem.',
               color: BulletColor.green,
             ),
             BulletText(
-              text: 'To si zapamatuj - pokud si ho budeš chtít upravit na vlastní, tak ho můžeš změnit přes stránky https://locika.neziskovky.com/ po přihlášení na záložce "Můj účet".',
+              text: 'Nové heslo si zapamatuj. Pokud si ho budeš chtít upravit na vlastní, tak jej změníš přes stránky https://locika.neziskovky.com . Stačí se přihlásit a kliknout na záložku “Můj účet”.',
               color: BulletColor.yellow,
             ),
           ],

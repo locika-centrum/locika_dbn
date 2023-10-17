@@ -8,13 +8,11 @@ import 'package:logging/logging.dart';
 
 import '../../utils/app_theme.dart';
 import './redirect_button.dart';
+import '../services/neziskovky_parser.dart';
 
 Logger _log = Logger('call_botom_sheet.dart');
 
 class CallBottomSheet {
-  // TODO put the correct phone number
-  static const number = '';
-
   static void showDialog(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -51,7 +49,7 @@ class CallBottomSheet {
                     label: 'Volat policii',
                     backgroundColor: AppTheme.primaryYellow,
                     buttonColor: AppTheme.primaryTextYellow,
-                    callback: () => _makeCall(number),
+                    callback: () => _makeCall(PolicePhoneNumber),
                   ),
                 ),
               ),

@@ -18,6 +18,7 @@ const String _host = 'chat.neziskovky.com';
 // const String _host = 'locika.neziskovky.com';
 const String _cgiPath = 'fcgi/sonic.cgi';
 const String _locikaMail = 'david.svejda@me.com';
+const String PolicePhoneNumber = '158';
 
 const int _OK = 200;
 const int _BAD_REQUEST = 400;

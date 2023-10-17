@@ -230,6 +230,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 title: const Text('Data'),
                 value: Text(_connectionStatus.name),
               ),
+              SettingsTile(
+                leading: const Icon(Icons.help),
+                title: const Text('Podržením loga DBN se přepneš do chatovacího režimu, ve kterém je možné se online spojit s dětským poradcem.'),
+              ),
             ],
           ),
         ],

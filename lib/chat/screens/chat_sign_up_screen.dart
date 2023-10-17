@@ -71,7 +71,7 @@ class _ChatSignUpScreenState extends State<ChatSignUpScreen> {
                 autofocus: false,
                 obscureText: !_passwordVisible,
                 decoration: InputDecoration(
-                  hintText: 'Heslo',
+                  hintText: 'Heslo musí mít min 6 znaků.',
                   labelText: 'Heslo',
                   contentPadding: EdgeInsets.fromLTRB(0.0, 10.0, 20.0, 10.0),
                   errorText: errorPassword,

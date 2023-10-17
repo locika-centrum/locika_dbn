@@ -1,38 +1,50 @@
 # Kdy volat policii
 \
-Bojíš se o svůj život, zdraví nebo život někoho blízkého?
+**Jsi v situaci, že ti někdo ubližuje, bije tě nebo tě jinak ohrožuje?**
+\
+\
+**Bojíš se o svůj život, zdraví nebo život svých blízkých?**
+\
+\
+**Potřebuješ pomoc zastavit probíhající násilí?**
+\
+\
+**Máš strach, že tě někdo pronásleduje?**
 
-Bije tě někdo nebo ti jinak ubližuje? Vidíš nebo slyšíš, že je ubližováno někomu blízkému?
+###### ![dnb](resource:assets/images/police.png#250x250)
 
-Potřebuješ pomoc zastavit probíhající násilí?
-
-Máš strach, že tě někdo pronásleduje?
-
-Jsi v těžké situaci a potřebuješ pomoc?
-
-###### ![dnb](resource:assets/images/police.png#300x300)
-
-**Můžeš zavolat policii, nebo o tom říct někomu dospělému, aby zajistil pomoc.**
 \
 \
-Jestli to jde, řekni o pomoc někomu dospělému - rodič, teta, babička, učitelka, soused/ka, či někomu kdo jde kolem. Máš tu možnost?
+Pokud ano, zkus si říci o pomoc dospělému ve Tvém okolí nebo rovnou kontaktovat  policii - zavolej 158, pošli na toto číslo SMS, nebo zmáčkni nouzové  SOS tlačítko v této aplikaci. **Po jeho zmáčknutí budeš spojen/a přímo s policií, nemusíš mluvit, policie uslyší, co se u vás doma děje a uvidí Tvé číslo a místo, kde se nacházíš.**
 \
 \
-Můžeš si o pomoc říct, i když je v ohrožení někdo jiný.
+**V tu chvíli přestáváš být anonymní.**
 \
 \
-Je dobře, že si říkáš o pomoc.
+Je jasné, že můžeš mít strach kontaktovat policii. To mívá každý. Je ale důležité, abys věděl/a, že policisté jsou profesionálové, kteří vědí co dělat, pokud se jim ozveš. **Chceme tě podpořit, aby sis řekl/a o pomoc. Je to opravdu důležité, i když je možné, že ne všem lidem kolem tebe se to bude líbit.**
 \
 \
-Pokud nikdo takový není, **tak:
-můžeš použít “fialové tlačítko”. Po zmáčknutí tlačítka budeš mluvit přímo s policií.**
+**Co bude pak?**
 \
 \
-Víme, že teď můžeš mít strach zavolat policii. Je důležité, abys věděl/a, že tam pracují profesionálové, kteří vědí co dělat, když se jim ozveš. Možná máš teď strach a nevíš co dělat. To má každý, když volá na polici. **Chceme tě podpořit, řekni si o pomoc. Zavolej.**
+**Police určitě přijede. Měla by přijet rychle.**
 \
 \
-Řekni policii vše, co půjde, aby ti mohli pomoct, potřebují dobře rozumět situaci.
-Policie uvidí tvé telefonní číslo. V tu chvíli přestáváš být anonymní.
+Nejspíš s nimi přijede i sociální pracovnice, která ví, jak pomáhat dětem v situaci ohrožení.
+\
+\
+Policie bude chtít mluvit i s tvými rodiči, pokud tam teď jsou.
+\
+\
+**Pokud je to potřeba,  odveze tě policie na bezpečné místo.**
+\
+To může být  třeba k tvým příbuzným. Může to být i nemocnice. Nebo jiné místo.
+\
+\
+**Policie může také odvézt přímo člověka, který tobě nebo někomu jinému ubližuje.** Budeš pak v bezpečí doma.
+\
+\
+**Řekni policii vše, co půjde, aby ti mohli pomoci, potřebují rozumět situaci.**
 \
 \
 **Policie potřebuje vědět:**
@@ -45,43 +57,11 @@ Policie uvidí tvé telefonní číslo. V tu chvíli přestáváš být anonymn�
 | ![dnb](resource:assets/images/bullet_red.png#8x8)    | Kdy se to stalo. |
 | ![dnb](resource:assets/images/bullet_blue.png#8x8)   | Komu se to stalo. |
 
-\
-**Co bude pak?**
-\
-\
-**Police určitě přijede.** Měla by přijet rychle.
+
+**Pokud potřebuješ pomoci se rozhodnout, zda policii zavolat, napiš nám anonymně na chat, nebo zavolej  Linku bezpečí 116 111.**
 \
 \
-Nejspíš s nimi přijede i sociální pracovnice, která ví, jak pomáhat dětem v situaci ohrožení.
+**Můžeš se potom ozvat opět na náš chat.**
 \
 \
-Policie bude chtít mluvit i s tvými rodiči, pokud tam teď jsou.
-\
-\
-**Když že je to potřeba, odveze tě policie na bezpečné místo.**
-To může být u třeba ke tvým příbuzným. Může to být i nemocnice. Nebo jiné místo.
-\
-\
-**Policie může také odvézt přímo člověka, který tobě nebo někomu jinému ubližuje.** Budeš pak v bezpečí doma.
-Pokud ti ubližuje někdo blízký, třeba v rodině, je potřeba aby odborníci pomohli situaci zklidnit. O svého blízkého nemusíš přijít. 
-\
-\
-Odborníci by ale měli přihlédnout ke tvému přání.
-\
-\
-**Ty máš právo říct si o pomoc. Je možné, že se to nebude lidem kolem tebe líbit.**
-\
-\
-\
-**Zasílání sms:**
-\
-\
-**Pokud teď nemůžeš mluvit, pošli policii sms. Použij stejné číslo, tedy 158.** Policie ti napíše a bude se zajímat co se děje. Napiš jim svoje jméno a místo, kde právě jsi.
-Pokud chceš napsat sms, použij běžný postup, jakým píšeš smsky a zadej číslo 158.
-\
-\
-**Pokud nevíš, jestli volat policii, napiš nám anonymně na chat, nebo zavolej Linku bezpečí 116 111.**
-\
-\
-**Ozvi se nám potom na chat
-Můžeš se pak ozvat na chat a mluvit o tom, jak to celé proběhlo a jak ti je teď. Můžeš se zeptat na vše další, co budeš potřebovat vědět. Jsme tu pro tebe.**
+**Pokud budeš potřebovat, napiš nám, jak to celé proběhlo a jak ti je teď. Můžeš se zeptat na cokoliv, co budeš potřebovat vědět. Jsme tu pro tebe.**

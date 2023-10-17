@@ -167,7 +167,6 @@ class _ChatScreenState extends State<ChatScreen>
       },
       child: Scaffold(
         appBar: const ChatAppBar(
-          route: '/',
           showAboutLink: true,
         ),
         backgroundColor: const Color(0xffd9e8f3),

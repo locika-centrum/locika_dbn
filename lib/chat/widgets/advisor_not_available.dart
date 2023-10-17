@@ -17,10 +17,14 @@ class AdvisorNotAvailable extends StatelessWidget {
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
 
-    if (now.weekday == DateTime.saturday ||
+    if ((now.weekday == DateTime.saturday &&
+          (now.hour < 9 ||
+              now.hour > 14 ||
+              (now.hour > 13 && now.minute > 30)))  ||
         now.weekday == DateTime.sunday ||
         now.hour < 13 ||
-        now.hour > 16) {
+        now.hour > 18 ||
+        (now.hour == 17 && now.minute > 30)) {
       return Column(
         children: [
           DateChip(
@@ -30,7 +34,7 @@ class AdvisorNotAvailable extends StatelessWidget {
           BubbleNormalImage(
             id: 'id001',
             image: Image.asset(
-              'assets/images/face_offline.png',
+              'assets/images/emoji01.png',
               width: 120,
             ),
             isSender: false,
@@ -57,7 +61,7 @@ class AdvisorNotAvailable extends StatelessWidget {
     return Column(
       children: [
         Image.asset(
-          'assets/images/face_not_available.png',
+          'assets/images/emoji02.png',
           width: 150,
         ),
         DateChip(
@@ -72,7 +76,7 @@ class AdvisorNotAvailable extends StatelessWidget {
         ),
         const BubbleSpecialThree(
           text:
-              'Je to akutní?\n- Zavolej na Linku bezpečí nebo Dětského krizového centra.\n- Použij SOS tlačítko',
+              'Je to akutní?\n- Zavolej na Linku bezpečí (116 111) nebo Dětské krizové centrum - 777 715 215\n- Použij SOS tlačítko',
           isSender: false,
           tail: true,
           color: Color(0xffe9e9eb),

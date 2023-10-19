@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
@@ -46,7 +44,7 @@ class _GameBoardWidgetState extends State<GameBoardWidget> {
             .buffer
             .asUint8List();
 
-    setState(() => image = img.decodeImage(data.toList()));
+    setState(() => image = img.decodeImage(data));
     imageWidth = (image!.width / gameBoard.size).round();
     imageHeight = (image!.height / gameBoard.size).round();
   }
@@ -113,16 +111,16 @@ class _GameBoardWidgetState extends State<GameBoardWidget> {
 
             img.Image imagePart = img.copyCrop(
               image!,
-              colScrambled * imageWidth,
-              rowScrambled * imageHeight,
-              imageWidth,
-              imageHeight,
+              x: colScrambled * imageWidth,
+              y: rowScrambled * imageHeight,
+              width: imageWidth,
+              height: imageHeight,
             );
 
             return Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: MemoryImage(img.encodePng(imagePart) as Uint8List),
+                  image: MemoryImage(img.encodePng(imagePart)),
                   fit: BoxFit.fill,
                 ),
               ),

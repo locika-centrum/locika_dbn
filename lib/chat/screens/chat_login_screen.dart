@@ -181,6 +181,11 @@ class _ChatLoginScreenState extends State<ChatLoginScreen> {
           break;
 
         default:
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Chyba při loginu: ${result.statusCode}: ${result.message}: ${result.data.toString()}'),
+              ),
+          );
           context.go('/work_in_progress');
       }
     }

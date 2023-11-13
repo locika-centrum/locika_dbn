@@ -103,6 +103,7 @@ Future<ChatResponse> authenticate({
       cookie: response.headers.containsKey('set-cookie')
           ? Cookie.fromSetCookieValue(response.headers['set-cookie']!)
           : null);
+
   if (result.statusCode == 200) {
     Document document = parse(response.body);
     List<Element> elements = document.getElementsByTagName('center');
@@ -119,6 +120,10 @@ Future<ChatResponse> authenticate({
       result.statusCode = _BAD_REQUEST;
     }
   }
+  else {
+    result.message = response.request.toString();
+  }
+  _log.info('Authenticate: ${result.statusCode}, ${response.request.toString()}');
 
   return result;
 }

@@ -20,7 +20,7 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       toolbarHeight: 62.0 + 16.0,
       leading: route.isNotEmpty ? AppBarTextButton('Zavřít', route) : null,
-      leadingWidth: 64.0,
+      leadingWidth: 72.0,
       actions: showAboutLink
           ? [
               const AppBarTextButton('O chatu', '/about_chat'),

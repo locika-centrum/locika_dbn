@@ -14,10 +14,13 @@ import '../models/chat_room.dart';
 import '../models/chat_message.dart';
 
 const String _scheme = 'https';
-const String _host = 'chat.neziskovky.com';
-// const String _host = 'locika.neziskovky.com';
+// const String _host = 'chat.neziskovky.com';        // TEST
+const String _host = 'locika.neziskovky.com';         // PRODUCTION
+// const String _timestamp = 'storage_free/1110';     // TEST
+const String _timestamp = 'storage_free/1112';        // PRODUCTION
+
 const String _cgiPath = 'fcgi/sonic.cgi';
-const String _locikaMail = 'david.svejda@me.com';
+// const String _locikaMail = '';                     // MAIL ADDRESS FOR IN-APP MAIL
 const String PolicePhoneNumber = '158';
 
 const int _OK = 200;
@@ -320,7 +323,8 @@ Future<String> getChatTimestamp({
 
   http.Response response = await _queryServer(
     method: _HttpMethod.get,
-    query: 'storage_free/1110/p_chat_${chatID}_nova_zprava.txt',
+    query: '$_timestamp/p_chat_${chatID}_nova_zprava.txt',
+    // TEST: query: 'storage_free/1110/p_chat_${chatID}_nova_zprava.txt',
     cookie: cookie,
     file: true,
   );
@@ -391,11 +395,18 @@ Future<ChatResponse<ChatMessage>> getChatMessages({
       Element time = element.getElementsByTagName('abbr').first;
       Element sysMessage = element.getElementsByTagName('b').first;
       Element? message;
+
+      _log.finest('Zprava od: ${sysMessage.text.trim()}');
+
       switch (sysMessage.text.trim()) {
         case 'Zpráva systému':
           message = element.getElementsByTagName('span').first;
           break;
         case 'Pracovník chatu':
+          message = Element.tag('div');
+          message.text = _cleanChatText(element.nodes.last.toString());
+          break;
+        case 'Poradce':
           message = Element.tag('div');
           message.text = _cleanChatText(element.nodes.last.toString());
           break;
@@ -454,6 +465,7 @@ Future<ChatResponse> postMessage({
   return result;
 }
 
+/*
 Future<String> sendMailThroughClient({
   required String email,
   required String messagereal,
@@ -479,6 +491,7 @@ Future<String> sendMailThroughClient({
 
   return result;
 }
+*/
 
 Future<ChatResponse> sendMailThroughForm({
   required String email,

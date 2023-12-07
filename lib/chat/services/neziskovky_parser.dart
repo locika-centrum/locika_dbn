@@ -14,10 +14,10 @@ import '../models/chat_room.dart';
 import '../models/chat_message.dart';
 
 const String _scheme = 'https';
-const String _host = 'chat.neziskovky.com';        // TEST
-// const String _host = 'locika.neziskovky.com';         // PRODUCTION
-const String _timestamp = 'storage_free/1110';     // TEST
-// const String _timestamp = 'storage_free/1112';        // PRODUCTION
+// const String _host = 'chat.neziskovky.com';        // TEST
+const String _host = 'locika.neziskovky.com';         // PRODUCTION
+// const String _timestamp = 'storage_free/1110';     // TEST
+const String _timestamp = 'storage_free/1112';        // PRODUCTION
 
 const String _cgiPath = 'fcgi/sonic.cgi';
 // const String _locikaMail = '';                     // MAIL ADDRESS FOR IN-APP MAIL

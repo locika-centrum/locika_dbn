@@ -150,7 +150,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   color: Colors.grey,
                   height: 24,
                 ),
-                title: const Text('Reversi: začíná hráč'),
+                title: const Text('Kameny: začíná hráč'),
                 onToggle: (value) {
                   context.read<SettingsData>().reversiStartsHuman = value;
                 },

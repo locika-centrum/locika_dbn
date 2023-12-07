@@ -53,10 +53,10 @@ class _MainScreenState extends State<MainScreen> {
       ),
     ));
     menuItems.add(AppMenuItem(
-      title: 'Reversi',
+      title: 'Kameny',
       icon: Image.asset('assets/images/game_icon_03.png'),
       page: const ReversiScreen(
-        title: 'Reversi',
+        title: 'Kameny',
         backgroundColor: Color(0xff5ac8b8),
       ),
     ));

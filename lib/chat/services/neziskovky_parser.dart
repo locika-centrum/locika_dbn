@@ -14,10 +14,10 @@ import '../models/chat_room.dart';
 import '../models/chat_message.dart';
 
 const String _scheme = 'https';
-// const String _host = 'chat.neziskovky.com';        // TEST
-const String _host = 'locika.neziskovky.com';         // PRODUCTION
-// const String _timestamp = 'storage_free/1110';     // TEST
-const String _timestamp = 'storage_free/1112';        // PRODUCTION
+const String _host = 'chat.neziskovky.com';        // TEST
+// const String _host = 'locika.neziskovky.com';         // PRODUCTION
+const String _timestamp = 'storage_free/1110';     // TEST
+// const String _timestamp = 'storage_free/1112';        // PRODUCTION
 
 const String _cgiPath = 'fcgi/sonic.cgi';
 // const String _locikaMail = '';                     // MAIL ADDRESS FOR IN-APP MAIL
@@ -427,6 +427,30 @@ Future<ChatResponse<ChatMessage>> getChatMessages({
       ));
     }
   }
+
+  return result;
+}
+
+Future<ChatResponse<ChatMessage>> endChat({
+  required String chatID,
+  required Cookie cookie,
+}) async {
+  ChatResponse<ChatMessage> result;
+
+  _log.finest('endChat: Cookie = $cookie, chat = $chatID');
+  // Open new chat, or connect to already existing
+  http.Response response = await _queryServer(
+    method: _HttpMethod.get,
+    query: 'templ=index&page_include=p_chat_det&chat_end=$chatID',
+    cookie: cookie,
+  );
+
+  result = ChatResponse(
+      statusCode: response.statusCode,
+      cookie: response.headers.containsKey('set-cookie')
+          ? Cookie.fromSetCookieValue(response.headers['set-cookie']!)
+          : null);
+  _log.finest('endChat: response = ${result.statusCode}');
 
   return result;
 }

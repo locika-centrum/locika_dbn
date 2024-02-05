@@ -24,6 +24,7 @@ import 'chat/screens/chat_rules_screen.dart';
 import 'chat/screens/most_interesting_facts_screen.dart';
 import 'chat/screens/email_screen.dart';
 import 'chat/screens/about_reset_password_screen.dart';
+import 'chat/screens/about_navigation_screen.dart';
 
 import 'chat/services/neziskovky_parser.dart';
 
@@ -209,6 +210,12 @@ class MyApp extends StatelessWidget {
       GoRoute(
         path: '/about_chat',
         builder: (context, state) => const AboutChatScreen(),
+      ),
+      GoRoute(
+        path: '/about_navigation',
+        builder: (context, state) => AboutNavigationScreen(
+          returnRoute: state.extra as String,
+        ),
       ),
       GoRoute(
         path: '/about_call_police',

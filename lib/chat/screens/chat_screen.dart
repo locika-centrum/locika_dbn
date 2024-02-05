@@ -183,7 +183,7 @@ class _ChatScreenState extends State<ChatScreen>
                 Container(
                   color: const Color(0xfffebd49),
                   child: InkWell(
-                    onTap: () => CallBottomSheet.showDialog(context),
+                    onTap: () => CallBottomSheet.showDialog(context, '/chat'),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(

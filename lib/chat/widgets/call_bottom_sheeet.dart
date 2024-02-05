@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
 
 import '../../utils/app_theme.dart';
@@ -13,7 +15,7 @@ import '../services/neziskovky_parser.dart';
 Logger _log = Logger('call_botom_sheet.dart');
 
 class CallBottomSheet {
-  static void showDialog(BuildContext context) {
+  static void showDialog(BuildContext context, String returnRoute) {
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -38,9 +40,13 @@ class CallBottomSheet {
                   onTap: () => Navigator.pop(context),
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.only(bottom: 24.0,),
-                child: GeolocatorWidget(),
+              Padding(
+                padding: const EdgeInsets.only(
+                  bottom: 24.0,
+                ),
+                child: GeolocatorWidget(
+                  returnRoute: returnRoute,
+                ),
               ),
               SafeArea(
                 child: Padding(
@@ -66,7 +72,10 @@ class CallBottomSheet {
 }
 
 class GeolocatorWidget extends StatefulWidget {
-  const GeolocatorWidget({Key? key}) : super(key: key);
+  final String returnRoute;
+
+  const GeolocatorWidget({Key? key, required this.returnRoute})
+      : super(key: key);
 
   @override
   State<GeolocatorWidget> createState() => _GeolocatorWidgetState();
@@ -127,27 +136,55 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
 
   Future<Position?> _getCurrentPositionNew() async {
     bool serviceEnabled = await _geolocatorPlatform.isLocationServiceEnabled();
+    _log.finest('Position enabled: $serviceEnabled');
 
     if (serviceEnabled) {
       LocationPermission permission =
           await _geolocatorPlatform.checkPermission();
+      _log.finest('LocationPermission: $permission');
       if (permission == LocationPermission.denied) {
-        permission = await _geolocatorPlatform.requestPermission();
-        if (permission == LocationPermission.denied) {
-          _log.finest('Location permissions denied');
-          return null;
+        // show explanatory UI screen
+        if (context.mounted) {
+          context.go('/about_navigation', extra: widget.returnRoute);
+
+          /*
+          showOkAlertDialog(
+              context: context,
+              title: 'Přístup k poloze',
+              message:
+                  'Aplikace vyžaduje povolení přístupu k informaci o tvoji poloze. Poloha bude předána při komunikaci s policií.\n\nNa další obrazovce prosím potvrď možnost přístupu k polohový datům.',
+              onPopInvoked: (bool didPop) async {
+                permission = await _geolocatorPlatform.requestPermission();
+                if (permission == LocationPermission.denied) {
+                  _log.finest('Location permissions denied');
+                  return;
+                }
+                if (permission == LocationPermission.deniedForever) {
+                  _log.finest('Location permissions denied forever');
+                  return;
+                }
+
+                position = await _geolocatorPlatform.getCurrentPosition();
+                if (position != null) {
+                  placemarks = await placemarkFromCoordinates(
+                      position!.latitude, position!.longitude);
+                }
+                setState(() {});
+                return;
+              });
+           */
         }
-      }
+      } else {
+        position = await _geolocatorPlatform.getCurrentPosition();
+        if (position != null) {
+          placemarks = await placemarkFromCoordinates(
+              position!.latitude, position!.longitude);
+        }
+        setState(() {});
 
-      if (permission == LocationPermission.deniedForever) {
-        _log.finest('Location permissions denied forever');
-        return null;
+        return position;
       }
-
-      // Permission is granted - check the location
-      return await _geolocatorPlatform.getCurrentPosition();
     }
-    _log.finest('Location service is not enabled');
     return null;
   }
 }

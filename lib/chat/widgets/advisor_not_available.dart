@@ -49,7 +49,7 @@ class AdvisorNotAvailable extends StatelessWidget {
             color: Colors.white,
           ),
           const BubbleSpecialThree(
-            text: 'Pokud se potřebuješ svěřit, volej: ORGANIZACE A TELEFON. Nebo nám napiš e-mail a my se ti co nejdříve ozveme.',
+            text: 'Pokud se potřebuješ svěřit, volej Linku bezpečí (116 111) nebo Dětské krizové centrum - 777 715 215. Nebo nám napiš e-mail a my se ti co nejdříve ozveme.',
             isSender: false,
             tail: true,
             color: Colors.white,

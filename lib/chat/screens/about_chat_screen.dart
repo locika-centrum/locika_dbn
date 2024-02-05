@@ -86,7 +86,7 @@ class AboutChatScreen extends StatelessWidget {
                     hintText: 'Kdy volat policii',
                     hintRoute: '/about_call_police',
                     actionButton: OutlinedButton(
-                      onPressed: () => CallBottomSheet.showDialog(context),
+                      onPressed: () => CallBottomSheet.showDialog(context, '/about_chat'),
                       style: OutlinedButton.styleFrom(
                         backgroundColor: const Color(0xfffebd49),
                         foregroundColor: Colors.white,

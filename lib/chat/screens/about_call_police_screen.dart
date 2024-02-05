@@ -42,7 +42,7 @@ class AboutCallPoliceScreen extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: RedirectButton(
                           label: 'SOS Pomoc',
-                          callback: () => CallBottomSheet.showDialog(context),
+                          callback: () => CallBottomSheet.showDialog(context, '/about_call_police'),
                           buttonColor: Colors.black,
                           backgroundColor: const Color(0xfffdbc47),
                         ),

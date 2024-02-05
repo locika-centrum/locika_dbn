@@ -3,7 +3,7 @@ description: Chat application for Centrum LOCIKA.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.0+25
+version: 1.0.0+26
 
 environment:
   sdk: '>=3.1.0 <4.0.0'
@@ -38,6 +38,7 @@ dependencies:
   flutter_phone_direct_caller: ^2.1.1
   connectivity_plus: ^5.0.1
   flutter_email_sender: ^6.0.1
+  adaptive_dialog: ^2.0.0
 
 dev_dependencies:
   flutter_test:

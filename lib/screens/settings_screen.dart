@@ -9,6 +9,7 @@ import 'package:settings_ui/settings_ui.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:logging/logging.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../settings/model/settings_data.dart';
 
@@ -35,6 +36,7 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   ConnectivityResult _connectionStatus = ConnectivityResult.none;
   final Connectivity _connectivity = Connectivity();
+  final Uri _urlGDPR = Uri.parse('https://detstvibeznasili.cz/gdpr');
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
 
   @override
@@ -232,7 +234,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               SettingsTile(
                 leading: const Icon(Icons.help),
-                title: const Text('Podržením loga DBN se přepneš do chatovacího režimu, ve kterém je možné se online spojit s dětským poradcem.'),
+                title: const Text(
+                    'Podržením loga DBN se přepneš do chatovacího režimu, ve kterém je možné se online spojit s dětským poradcem.'),
+              ),
+              SettingsTile.navigation(
+                leading: const Icon(Icons.assured_workload_rounded),
+                title: const Text('GDPR'),
+                onPressed: (context) {
+                  _launchUrl();
+                },
               ),
             ],
           ),
@@ -245,5 +255,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
     return '${packageInfo.version} - ${packageInfo.buildNumber}';
+  }
+
+  Future<void> _launchUrl() async {
+    if (!await launchUrl(_urlGDPR)) {
+      throw Exception('Could not launch $_urlGDPR');
+    }
   }
 }

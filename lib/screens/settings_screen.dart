@@ -34,10 +34,10 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  ConnectivityResult _connectionStatus = ConnectivityResult.none;
+  List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
   final Connectivity _connectivity = Connectivity();
   final Uri _urlGDPR = Uri.parse('https://detstvibeznasili.cz/gdpr');
-  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+  late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
 
   @override
   void initState() {
@@ -49,7 +49,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> initConnectivity() async {
-    late ConnectivityResult result;
+    late List<ConnectivityResult> result;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       result = await _connectivity.checkConnectivity();
@@ -68,7 +68,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return _updateConnectionStatus(result);
   }
 
-  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+  Future<void> _updateConnectionStatus(List<ConnectivityResult> result) async {
     setState(() {
       _connectionStatus = result;
     });
@@ -230,7 +230,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               SettingsTile(
                 leading: const Icon(Icons.network_check),
                 title: const Text('Data'),
-                value: Text(_connectionStatus.name),
+                value: Text(_connectionStatus[0].name),
               ),
               SettingsTile(
                 leading: const Icon(Icons.help),

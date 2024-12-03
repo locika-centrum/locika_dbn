@@ -36,7 +36,7 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
   final Connectivity _connectivity = Connectivity();
-  final Uri _urlGDPR = Uri.parse('https://detstvibeznasili.cz/gdpr');
+  final Uri _urlGDPR = Uri.parse('https://detstvibeznasili.cz/ochrana-osobnich-udaju');
   late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
 
   @override

@@ -19,6 +19,8 @@ const String _host = 'locika.neziskovky.com';         // PRODUCTION
 // const String _timestamp = 'storage_free/1110';     // TEST
 const String _timestamp = 'storage_free/1112';        // PRODUCTION
 
+const String _testUser = 'storetest';
+
 const String _cgiPath = 'fcgi/sonic.cgi';
 // const String _locikaMail = '';                     // MAIL ADDRESS FOR IN-APP MAIL
 const String PolicePhoneNumber = '158';
@@ -47,7 +49,7 @@ Future<ChatResponse<ChatRoom>> getChatRooms({Cookie? cookie}) async {
 
   http.Response response = await _queryServer(
     method: _HttpMethod.get,
-    query: 'templ=p_chat_pracovnik',
+    query: 'templ=p_chat_pracovnik&zdroj=app_kb',
     cookie: cookie,
   );
   result = ChatResponse(
@@ -142,7 +144,7 @@ Future<ChatResponse> register({
 
   http.Response response = await _queryServer(
     method: _HttpMethod.get,
-    query: 'templ=p_login_reg_simple',
+    query: 'templ=p_login_reg_simple&zdroj=app_kb',
   );
   cookie = response.headers.containsKey('set-cookie')
       ? Cookie.fromSetCookieValue(response.headers['set-cookie']!)
@@ -284,7 +286,7 @@ Future<ChatResponse> initChat({
   // Else open new chat
   http.Response response = await _queryServer(
     method: _HttpMethod.get,
-    query: 'templ=p_chat_control&chat_start=$advisorID',
+    query: 'templ=p_chat_control&chat_start=$advisorID&zdroj=app_kb',
     //query: 'templ=p_chat_control',
     cookie: cookie,
   );
@@ -344,7 +346,7 @@ Future<ChatResponse> checkAuthorized({
   // Open new chat, or connect to already existing
   http.Response response = await _queryServer(
     method: _HttpMethod.get,
-    query: 'templ=p_chat_zpravy',
+    query: 'templ=p_chat_zpravy&zdroj=app_kb',
     cookie: cookie,
   );
   result = ChatResponse(
@@ -356,7 +358,7 @@ Future<ChatResponse> checkAuthorized({
     Document document = parse(response.body);
 
     List<Element> element = document.getElementsByClassName('alert');
-    if (element.length == 1 && !element.first.text.contains('Chyba')) {
+    if (element.length == 1 && !element.first.text.contains('Chyba') && !element.first.text.contains('Chat nebyl nalezen.')) {
       _log.finest('User already logged in - ${result.cookie}');
     } else {
       result.statusCode = HttpStatus.unauthorized;
@@ -378,7 +380,7 @@ Future<ChatResponse<ChatMessage>> getChatMessages({
   // Open new chat, or connect to already existing
   http.Response response = await _queryServer(
     method: _HttpMethod.get,
-    query: 'templ=p_chat_zpravy&id_chat=$chatID',
+    query: 'templ=p_chat_zpravy&id_chat=$chatID&zdroj=app_kb',
     cookie: cookie,
   );
 
@@ -441,7 +443,7 @@ Future<ChatResponse<ChatMessage>> endChat({
   // Open new chat, or connect to already existing
   http.Response response = await _queryServer(
     method: _HttpMethod.get,
-    query: 'templ=index&page_include=p_chat_det&chat_end=$chatID',
+    query: 'templ=index&page_include=p_chat_det&chat_end=$chatID&zdroj=app_kb',
     cookie: cookie,
   );
 
@@ -528,7 +530,7 @@ Future<ChatResponse> sendMailThroughForm({
 
   http.Response response = await _queryServer(
     method: _HttpMethod.get,
-    query: 'templ=p_login_reg_simple',
+    query: 'templ=p_login_reg_simple&zdroj=app_kb',
   );
   cookie = response.headers.containsKey('set-cookie')
       ? Cookie.fromSetCookieValue(response.headers['set-cookie']!)
@@ -571,6 +573,10 @@ Future<ChatResponse> sendMailThroughForm({
   }
 
   return result;
+}
+
+bool storeUser(String user) {
+  return user == _testUser;
 }
 
 Future<ChatResponse> resetPassword({
@@ -654,6 +660,7 @@ Future<http.Response> _queryServer({
 //      result = await _client!.get(url, headers: headers);
         break;
       case _HttpMethod.post:
+        (body as Map<String, String?>).putIfAbsent('zdroj', () => 'app_kb');
         result = await http.Client().post(url, headers: headers, body: body);
 //      result = await _client!.post(url, headers: headers, body: body);
         break;

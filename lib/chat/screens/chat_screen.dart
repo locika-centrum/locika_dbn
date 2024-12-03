@@ -66,84 +66,104 @@ class _ChatScreenState extends State<ChatScreen>
         ticker.stop();
       }
 
-      if (room == null) {
+      if (storeUser(widget.cookie.name)) {
+        // test user will not initiate chat features
         if (lastElapsed == Duration.zero) {
-          context.read<SettingsData>().firstLogin = false;
-        }
-
-        // Retrieve room
-        if (lastElapsed == Duration.zero ||
-            elapsed.inSeconds - lastElapsed.inSeconds >=
-                ChatScreen.timerFindChatRetrySeconds) {
           lastElapsed = elapsed;
 
-          _log.fine('Tick ROOM: ${elapsed.inSeconds}');
-          ChatResponse<ChatRoom> result = await getChatRooms(
-            cookie: widget.cookie,
-          );
-
-          if (chatStart == null) setState(() => chatStart = DateTime.now());
-          if (result.statusCode == HttpStatus.ok && result.data.isNotEmpty) {
-            ChatRoom selectedRoom =
-                result.data[random.nextInt(result.data.length)];
-
-            if (context.mounted) {
-              ChatResponse response = await initChat(
-                advisorID: selectedRoom.advisorID!,
-                cookie: widget.cookie,
-              );
-              if (response.chatID != null) {
-                selectedRoom.chatID = response.chatID;
-                _log.fine('Successful chat initialization: $selectedRoom');
-
-                setState(() => room = selectedRoom);
-              }
-            }
+          if (chatStart == null) {
+            setState(() {
+            chatStart = DateTime.now();
+            room = ChatRoom(roomUri: null, name: 'TestRoom', status: '');
+          });
           }
+          _log.fine('Test user - no chat is opened');
         }
       } else {
-        // If room is found, retrieve chat
-        if (elapsed.inSeconds - lastElapsed.inSeconds >=
-            ChatScreen.timerGetMessageRetrySeconds) {
-          lastElapsed = elapsed;
+        if (room == null) {
+          if (lastElapsed == Duration.zero) {
+            context
+                .read<SettingsData>()
+                .firstLogin = false;
+          }
 
-          String newTimestamp = await getChatTimestamp(
-            chatID: room!.chatID!,
-            cookie: widget.cookie,
-          );
-          _log.finest(
-              '*** New stamp: $newTimestamp, empty: ${newTimestamp != ''}');
-          if (newTimestamp != '') {
-            if (!online) {
-              setState(() => online = true);
-            }
+          // Retrieve room
+          if (lastElapsed == Duration.zero ||
+              elapsed.inSeconds - lastElapsed.inSeconds >=
+                  ChatScreen.timerFindChatRetrySeconds) {
+            lastElapsed = elapsed;
 
-            if (timestamp != newTimestamp) {
-              timestamp = newTimestamp;
+            _log.fine('Tick ROOM: ${elapsed.inSeconds}');
+            ChatResponse<ChatRoom> result = await getChatRooms(
+              cookie: widget.cookie,
+            );
+
+            if (chatStart == null) setState(() => chatStart = DateTime.now());
+            if (result.statusCode == HttpStatus.ok && result.data.isNotEmpty) {
+              ChatRoom selectedRoom =
+              result.data[random.nextInt(result.data.length)];
 
               if (context.mounted) {
-                chatHistory = await getChatMessages(
-                    advisorID: room!.advisorID!,
-                    chatID: room!.chatID!,
-                    cookie: widget.cookie,
-                    nickName: context.read<SettingsData>().nickName);
-                _log.fine('Chat refreshed');
-                setState(() => {});
-
-                Future.delayed(
-                  const Duration(milliseconds: 200),
-                  () {
-                    scrollController
-                        .jumpTo(scrollController.position.maxScrollExtent);
-                  },
+                ChatResponse response = await initChat(
+                  advisorID: selectedRoom.advisorID!,
+                  cookie: widget.cookie,
                 );
+                if (response.chatID != null) {
+                  selectedRoom.chatID = response.chatID;
+                  _log.fine('Successful chat initialization: $selectedRoom');
+
+                  setState(() => room = selectedRoom);
+                }
               }
             }
-          } else {
-            setState(() => online = false);
           }
-          _log.fine(
-              'Tick MESSAGE: {elapsed: ${elapsed.inSeconds}, online: $online, chatStart: $chatStart, room: $room}');
+        } else {
+          // If room is found, retrieve chat
+          if (elapsed.inSeconds - lastElapsed.inSeconds >=
+              ChatScreen.timerGetMessageRetrySeconds) {
+            lastElapsed = elapsed;
+
+            String newTimestamp = await getChatTimestamp(
+              chatID: room!.chatID!,
+              cookie: widget.cookie,
+            );
+            _log.finest(
+                '*** New stamp: $newTimestamp, empty: ${newTimestamp != ''}');
+            if (newTimestamp != '') {
+              if (!online) {
+                setState(() => online = true);
+              }
+
+              if (timestamp != newTimestamp) {
+                timestamp = newTimestamp;
+
+                if (context.mounted) {
+                  chatHistory = await getChatMessages(
+                      advisorID: room!.advisorID!,
+                      chatID: room!.chatID!,
+                      cookie: widget.cookie,
+                      nickName: context
+                          .read<SettingsData>()
+                          .nickName);
+                  _log.fine('Chat refreshed');
+                  setState(() => {});
+
+                  Future.delayed(
+                    const Duration(milliseconds: 200),
+                        () {
+                      scrollController
+                          .jumpTo(scrollController.position.maxScrollExtent);
+                    },
+                  );
+                }
+              }
+            } else {
+              setState(() => online = false);
+            }
+            _log.fine(
+                'Tick MESSAGE: {elapsed: ${elapsed
+                    .inSeconds}, online: $online, chatStart: $chatStart, room: $room}');
+          }
         }
       }
     });

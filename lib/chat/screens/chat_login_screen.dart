@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logging/logging.dart';
@@ -163,6 +165,10 @@ class _ChatLoginScreenState extends State<ChatLoginScreen> {
       switch (result.statusCode) {
         case 200:
           _isValidForm = true;
+
+          if (storeUser(_nickNameController.text)) {
+            result.cookie = Cookie(_nickNameController.text, 'True');
+          }
           context
               .read<SessionData>()
               .cookie = result.cookie;
